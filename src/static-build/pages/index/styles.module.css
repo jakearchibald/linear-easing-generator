@@ -1,0 +1,25 @@
+:root {
+  --theme-white: #d7dadc;
+  --theme-black: #121213;
+}
+
+html {
+  background: var(--theme-black);
+  font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 16px;
+  color: var(--theme-white);
+  line-height: 1.5;
+  overflow-y: scroll;
+}
+
+body {
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

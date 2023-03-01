@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "downlevelIteration": true,
+    "module": "ESNext",
+    "jsx": "react",
+    "jsxFactory": "h",
+    "jsxFragmentFactory": "Fragment",
+    "strict": true,
+    "moduleResolution": "node",
+    "composite": true,
+    "declarationMap": true,
+    "baseUrl": "../",
+    "rootDir": "../",
+    "outDir": "../.tmp/ts",
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "paths": {
+      "static-build/*": ["src/static-build/*"],
+      "client/*": ["src/client/*"],
+      "shared/*": ["src/shared/*"],
+      "shared-types/*": ["src/shared-types/*"],
+      "workers/*": ["src/workers/*"]
+    }
+  }
+}

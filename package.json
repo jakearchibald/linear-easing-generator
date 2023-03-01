@@ -1,0 +1,37 @@
+{
+  "name": "linear-easing-generator",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "node --experimental-import-meta-resolve node_modules/.bin/rollup -c && node lib/move-output.mjs",
+    "debug": "node --experimental-import-meta-resolve --inspect-brk node_modules/.bin/rollup -c",
+    "dev": "node --experimental-import-meta-resolve node_modules/.bin/rollup -cw & npm run serve",
+    "serve": "serve .tmp/build/static"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-replace": "^5.0.2",
+    "@rollup/plugin-terser": "^0.4.0",
+    "@surma/rollup-plugin-off-main-thread": "^2.2.3",
+    "@types/mime-types": "^2.1.1",
+    "@types/node": "^18.11.18",
+    "cssnano": "^5.0.17",
+    "del": "^7.0.0",
+    "glob": "^9.1.0",
+    "image-size": "^1.0.1",
+    "lodash.camelcase": "^4.3.0",
+    "mime-types": "^2.1.34",
+    "postcss": "^8.4.6",
+    "postcss-modules": "^6.0.0",
+    "postcss-nested": "^6.0.0",
+    "postcss-url": "^10.1.3",
+    "preact": "^10.6.5",
+    "preact-render-to-string": "^5.1.19",
+    "rollup": "^3.10.1",
+    "serve": "^14.1.2",
+    "typescript": "^4.5.5",
+    "@codemirror/lang-javascript": "^6.1.4",
+    "@codemirror/theme-one-dark": "^6.1.1",
+    "codemirror": "^6.0.1"
+  }
+}
