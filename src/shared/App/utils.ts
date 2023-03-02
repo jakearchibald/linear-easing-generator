@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'preact/hooks';
 import swURL from 'service-worker:workers/sw';
 
 const isSafari =
@@ -59,4 +60,14 @@ export async function activatePendingSw(): Promise<void> {
   const reg = await navigator.serviceWorker.getRegistration();
   if (!reg || !reg.waiting) throw Error('No pending service worker');
   reg.waiting.postMessage('skipWaiting');
+}
+
+export function usePrevious<T>(value: T): T | null {
+  const ref = useRef<T | null>(null);
+
+  useEffect(() => {
+    ref.current = value;
+  }, [value]);
+
+  return ref.current;
 }
