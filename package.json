@@ -5,7 +5,7 @@
     "build": "node --experimental-import-meta-resolve node_modules/.bin/rollup -c && node lib/move-output.mjs",
     "debug": "node --experimental-import-meta-resolve --inspect-brk node_modules/.bin/rollup -c",
     "dev": "node --experimental-import-meta-resolve node_modules/.bin/rollup -cw & npm run serve",
-    "serve": "serve .tmp/build/static"
+    "serve": "serve --cors .tmp/build/static"
   },
   "devDependencies": {
     "@codemirror/lang-javascript": "^6.1.4",

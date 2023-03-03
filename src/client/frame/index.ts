@@ -1,6 +1,14 @@
 import workerURL from 'entry-url:workers/process-script';
 import { ProcessScriptData } from 'shared-types/index';
 
+// Null origins can't create workers from an external resource,
+// so we need to fetch the script and create a blob URL.
+const localWorkerURL = (async () => {
+  const response = await fetch(workerURL);
+  const text = await response.text();
+  return URL.createObjectURL(new Blob([text], { type: 'text/javascript' }));
+})();
+
 function isProcessJSData(data: any): data is ProcessScriptData {
   return data.action === 'process-script';
 }
@@ -11,24 +19,23 @@ function isTerminateWorkerAction(
   return data.action === 'terminate-worker';
 }
 
-let worker: Worker | null = null;
+let workerPromise: Promise<Worker> | null = null;
 
 function startWorker() {
-  if (worker) throw Error('Worker already running');
-  worker = new Worker(workerURL);
+  if (workerPromise) throw Error('Worker already running');
+  workerPromise = localWorkerURL.then((url) => new Worker(url));
 }
 
-function terminateWorker() {
-  if (!worker) return;
-  worker.terminate();
-  worker = null;
+async function terminateWorker() {
+  if (!workerPromise) return;
+  const lastWorkerPromise = workerPromise;
+  workerPromise = null;
+
+  (await lastWorkerPromise).terminate();
 }
 
-onmessage = ({ data }) => {
-  // The scripts we're receiving are not trusted.
-  // Ensure we're running them on a null origin.
-  if (location.origin !== null) return;
-  if (typeof data !== 'object' || data !== null) return;
+onmessage = async ({ data }) => {
+  if (typeof data !== 'object' || data === null) return;
 
   if (isProcessJSData(data)) {
     // Throw is worker is already running.
@@ -42,7 +49,7 @@ onmessage = ({ data }) => {
 
     // Also send the port to the worker, so the result can be sent straight back to the page,
     // Rather than going via this page.
-    worker!.postMessage(data);
+    (await workerPromise!).postMessage(data, [data.port]);
   } else if (isTerminateWorkerAction(data)) {
     terminateWorker();
   }

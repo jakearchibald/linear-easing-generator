@@ -4,14 +4,16 @@ function isProcessScriptData(data: any): data is ProcessScriptData {
   return data.action === 'process-script';
 }
 
-type EasingFunc = (value: number) => number;
+type EasingFunc = (value: number) => unknown;
 
 const pointsLength = 10_000;
 
 function processScriptData(script: string) {
   const oldGlobals = Object.keys(self);
 
-  eval(script);
+  // Indirect eval, so it happens in the global scope.
+  // http://perfectionkills.com/global-eval-what-are-the-options/
+  (1, eval)(script);
 
   let easingFunc: EasingFunc | undefined;
 
@@ -40,7 +42,7 @@ function processScriptData(script: string) {
 
   return Array.from({ length: pointsLength }, (_, i) => {
     const pos = i / pointsLength;
-    return [pos, easingFunc!(pos)];
+    return [pos, Number(easingFunc!(pos))];
   });
 }
 
@@ -49,8 +51,8 @@ let used = false;
 onmessage = ({ data }) => {
   // The scripts we're receiving are not trusted.
   // Ensure we're running them on a null origin.
-  if (location.origin !== null) return;
-  if (typeof data !== 'object' || data !== null) return;
+  if (origin !== 'null') return;
+  if (typeof data !== 'object' || data === null) return;
 
   if (isProcessScriptData(data)) {
     const { port, script } = data;

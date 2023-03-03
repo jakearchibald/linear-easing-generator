@@ -14,11 +14,14 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
   useSignalEffect(() => {
     currentProcessingControllerRef.current?.abort();
     currentProcessingControllerRef.current = new AbortController();
-    /*
+
     processScriptEasing(
       currentProcessingControllerRef.current.signal,
       code.value,
-    ).then((result) => console.log(result));*/
+    ).then(
+      (result) => console.log(result),
+      (error) => console.error(error),
+    );
   });
 
   return (
