@@ -27,6 +27,7 @@ import {
   closeBracketsKeymap,
   completionKeymap,
 } from '@codemirror/autocomplete';
+import { Signal } from '@preact/signals';
 
 const extensions = () => [
   lineNumbers(),
@@ -47,40 +48,41 @@ const extensions = () => [
     ...completionKeymap,
     indentWithTab,
   ]),
-  javascript(),
+  EditorView.lineWrapping,
   oneDark,
 ];
 
 interface Props {
   value: string;
   onInput?: (value: string) => void;
+  error: Signal<string>;
+  highlighting: 'js' | 'svg-path';
 }
 
 const Editor: FunctionComponent<Props> = ({
   value,
   onInput,
+  error,
+  highlighting,
 }: RenderableProps<Props>) => {
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const editorViewRef = useRef<EditorView | null>(null);
   const currentValueRef = useRef<string>('');
   const lastPropValueRef = useRef<string>(value);
 
-  // Handle updates to the editor
-  const editorUpdateCallback = useCallback(
-    (update: ViewUpdate) => {
-      if (!update.docChanged) return;
-      const newValue = update.state.doc.toString();
-      currentValueRef.current = newValue;
-      if (newValue === lastPropValueRef.current) return;
-      lastPropValueRef.current = newValue;
-      onInput?.(newValue);
-    },
-    [value],
-  );
-
   // Initial setup of the editor
   useLayoutEffect(() => {
-    const updateListener = EditorView.updateListener.of(editorUpdateCallback);
+    // Handle updates to the editor
+    const updateListener = EditorView.updateListener.of(
+      (update: ViewUpdate) => {
+        if (!update.docChanged) return;
+        const newValue = update.state.doc.toString();
+        currentValueRef.current = newValue;
+        if (newValue === lastPropValueRef.current) return;
+        lastPropValueRef.current = newValue;
+        onInput?.(newValue);
+      },
+    );
 
     editorViewRef.current = new EditorView({
       extensions: [...extensions(), updateListener],
@@ -106,7 +108,12 @@ const Editor: FunctionComponent<Props> = ({
     currentValueRef.current = value;
   }, [value]);
 
-  return <div ref={editorContainerRef} />;
+  return (
+    <div>
+      <div ref={editorContainerRef} />
+      <div>{error.value}</div>
+    </div>
+  );
 };
 
 export { Editor as default };

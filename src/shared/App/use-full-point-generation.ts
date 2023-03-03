@@ -1,0 +1,48 @@
+import { Signal, useSignal, useSignalEffect } from '@preact/signals';
+import { useRef } from 'preact/hooks';
+import { LinearData } from 'shared-types/index';
+import { processScriptEasing } from './process-script';
+
+const processingDebounce = 300;
+
+export default function useFullPointGeneration(
+  code: Signal<string>,
+): [linearData: Signal<LinearData | null>, codeError: Signal<string>] {
+  const fullPoints = useSignal<LinearData | null>(null);
+  const codeError = useSignal<string>('');
+  const currentProcessingControllerRef = useRef<AbortController | null>(null);
+  const processingTimeoutRef = useRef<number>(0);
+  const firstProcessRef = useRef(true);
+
+  useSignalEffect(() => {
+    const currentCode = code.value;
+    currentProcessingControllerRef.current?.abort();
+    clearTimeout(processingTimeoutRef.current);
+
+    async function process() {
+      firstProcessRef.current = false;
+      currentProcessingControllerRef.current = new AbortController();
+      try {
+        fullPoints.value = await processScriptEasing(
+          currentProcessingControllerRef.current.signal,
+          currentCode,
+        );
+        codeError.value = '';
+      } catch (error) {
+        fullPoints.value = null;
+        codeError.value = (error as Error).message;
+      }
+    }
+
+    // Don't debounce the first call
+    if (firstProcessRef.current) {
+      process();
+    } else {
+      processingTimeoutRef.current = (
+        setTimeout as typeof window['setTimeout']
+      )(process, processingDebounce);
+    }
+  });
+
+  return [fullPoints, codeError];
+}
