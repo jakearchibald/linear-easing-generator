@@ -17,6 +17,7 @@ import IndexPage from './pages/index';
 import * as socialIconURL from 'img-url:static-build/assets/social-icon.png';
 import * as maskableIconURL from 'img-url:static-build/assets/maskable-icon.png';
 import { lookup as lookupMime } from 'mime-types';
+import ProcessScript from './pages/process-script';
 
 const manifestSize = ({ width, height }: { width: number; height: number }) =>
   `${width}x${height}`;
@@ -27,6 +28,7 @@ interface Output {
 
 const toOutput: Output = {
   'index.html': renderPage(<IndexPage />),
+  '/process-script/index.html': renderPage(<ProcessScript />),
   'manifest.json': JSON.stringify({
     name: 'Wordle Analyzer',
     short_name: 'Wordle Analyzer',

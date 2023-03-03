@@ -148,7 +148,7 @@ export default async function ({ watch }) {
         },
         preventAssignment: true,
       }),
-      runScript(dir + '/index.js'),
+      runScript(dir + '/static-build/index.js'),
     ],
   };
 }

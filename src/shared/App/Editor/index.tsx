@@ -15,14 +15,18 @@ import {
   ViewUpdate,
 } from '@codemirror/view';
 import { indentOnInput, bracketMatching } from '@codemirror/language';
-import { history, defaultKeymap, historyKeymap } from '@codemirror/commands';
+import {
+  history,
+  defaultKeymap,
+  historyKeymap,
+  indentWithTab,
+} from '@codemirror/commands';
 import {
   closeBrackets,
   autocompletion,
   closeBracketsKeymap,
   completionKeymap,
 } from '@codemirror/autocomplete';
-import { usePrevious } from '../utils';
 
 const extensions = () => [
   lineNumbers(),
@@ -41,6 +45,7 @@ const extensions = () => [
     ...defaultKeymap,
     ...historyKeymap,
     ...completionKeymap,
+    indentWithTab,
   ]),
   javascript(),
   oneDark,
@@ -65,6 +70,7 @@ const Editor: FunctionComponent<Props> = ({
     (update: ViewUpdate) => {
       if (!update.docChanged) return;
       const newValue = update.state.doc.toString();
+      currentValueRef.current = newValue;
       if (newValue === lastPropValueRef.current) return;
       lastPropValueRef.current = newValue;
       onInput?.(newValue);

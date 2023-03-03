@@ -20,6 +20,7 @@ import faviconURL from 'url:static-build/assets/favicon.png';
 import socialImageURL from 'url:static-build/assets/social-large.png';
 // import ogImage from 'url:static-build/assets/icon-large-maskable.png';
 import { escapeStyleScriptContent, siteOrigin } from 'static-build/utils';
+import App from 'shared/App';
 
 interface Props {}
 
@@ -57,7 +58,9 @@ const Index: FunctionalComponent<Props> = () => (
       <script src={analyticsUrl} async />
     </head>
     <body>
-      <div id="app"></div>
+      <div id="app">
+        <App />
+      </div>
       <script
         dangerouslySetInnerHTML={{
           __html: escapeStyleScriptContent(allSrc),

@@ -4,5 +4,5 @@
     "lib": ["esnext", "dom", "dom.iterable"],
     "types": ["node"]
   },
-  "include": ["../src/shared", "../src/static-build"]
+  "include": ["../src/shared", "../src/static-build", "../src/shared-types"]
 }
