@@ -107,6 +107,8 @@ const Editor: FunctionComponent<Props> = ({
 
   // Handle changes to the value prop
   useSignalEffect(() => {
+    if (code.value === lastPropValueRef.current) return;
+
     editorViewRef.current!.dispatch({
       changes: {
         from: 0,
