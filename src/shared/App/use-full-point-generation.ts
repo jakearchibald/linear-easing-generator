@@ -29,6 +29,7 @@ export default function useFullPointGeneration(
         );
         codeError.value = '';
       } catch (error) {
+        if ((error as Error).name === 'AbortError') return;
         fullPoints.value = null;
         codeError.value = (error as Error).message;
       }
