@@ -4,13 +4,15 @@ import { useRef, useLayoutEffect, useCallback } from 'preact/hooks';
 import { LinearData } from 'shared-types/index';
 
 interface Props {
-  fullPoints: Signal<LinearData>;
+  fullPoints: Signal<LinearData | null>;
 }
 
 const Graph: FunctionComponent<Props> = ({
   fullPoints,
 }: RenderableProps<Props>) => {
   const fullPointsPath = useComputed(() => {
+    // We never render with null data here, but:
+    // https://github.com/preactjs/signals/issues/315
     if (!fullPoints.value) return '';
     return 'M ' + fullPoints.value.map(([x, y]) => `${x} ${1 - y}`).join();
   });

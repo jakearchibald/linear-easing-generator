@@ -1,9 +1,11 @@
 import { h, Fragment, RenderableProps, FunctionComponent } from 'preact';
-import { useRef, useLayoutEffect, useCallback } from 'preact/hooks';
+import { useRef, useLayoutEffect, useCallback, useEffect } from 'preact/hooks';
 import { EditorView } from 'codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { EditorState } from '@codemirror/state';
+import { Signal, useSignalEffect } from '@preact/signals';
+import type { Highlighting } from '../types';
 
 import {
   lineNumbers,
@@ -27,7 +29,6 @@ import {
   closeBracketsKeymap,
   completionKeymap,
 } from '@codemirror/autocomplete';
-import { Signal } from '@preact/signals';
 
 const extensions = () => [
   lineNumbers(),
@@ -50,17 +51,18 @@ const extensions = () => [
   ]),
   EditorView.lineWrapping,
   oneDark,
+  javascript(),
 ];
 
 interface Props {
-  value: string;
+  code: Signal<string>;
   onInput?: (value: string) => void;
   error: Signal<string>;
-  highlighting: 'js' | 'svg-path';
+  highlighting: Signal<Highlighting>;
 }
 
 const Editor: FunctionComponent<Props> = ({
-  value,
+  code,
   onInput,
   error,
   highlighting,
@@ -68,7 +70,12 @@ const Editor: FunctionComponent<Props> = ({
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const editorViewRef = useRef<EditorView | null>(null);
   const currentValueRef = useRef<string>('');
-  const lastPropValueRef = useRef<string>(value);
+  const lastPropValueRef = useRef<string>('');
+  const onInputRef = useRef<typeof onInput>(undefined);
+
+  useEffect(() => {
+    onInputRef.current = onInput;
+  }, [onInput]);
 
   // Initial setup of the editor
   useLayoutEffect(() => {
@@ -80,7 +87,7 @@ const Editor: FunctionComponent<Props> = ({
         currentValueRef.current = newValue;
         if (newValue === lastPropValueRef.current) return;
         lastPropValueRef.current = newValue;
-        onInput?.(newValue);
+        onInputRef.current?.(newValue);
       },
     );
 
@@ -95,23 +102,27 @@ const Editor: FunctionComponent<Props> = ({
   }, []);
 
   // Handle changes to the value prop
-  useLayoutEffect(() => {
-    lastPropValueRef.current = value;
+  useSignalEffect(() => {
+    lastPropValueRef.current = code.value;
 
     // Exit early if the external component is just giving us the current value.
-    if (value === currentValueRef.current) return;
+    if (code.value === currentValueRef.current) return;
 
     editorViewRef.current!.dispatch({
-      changes: { from: 0, to: currentValueRef.current.length, insert: value },
+      changes: {
+        from: 0,
+        to: currentValueRef.current.length,
+        insert: code.value,
+      },
     });
 
-    currentValueRef.current = value;
-  }, [value]);
+    currentValueRef.current = code.value;
+  });
 
   return (
     <div>
       <div ref={editorContainerRef} />
-      <div>{error.value}</div>
+      <div>{error}</div>
     </div>
   );
 };

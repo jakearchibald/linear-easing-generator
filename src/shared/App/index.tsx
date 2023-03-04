@@ -1,12 +1,18 @@
 import { h, Fragment, RenderableProps, FunctionComponent } from 'preact';
-import { Signal, useSignal, useSignalEffect } from '@preact/signals';
+import {
+  Signal,
+  useComputed,
+  useSignal,
+  useSignalEffect,
+} from '@preact/signals';
 import Editor from './Editor';
-import { useRef } from 'preact/hooks';
+import { useCallback, useRef } from 'preact/hooks';
 import { processScriptEasing } from './process-script';
 import type { LinearData } from 'shared-types/index';
 import 'add-css:./styles.module.css';
 import Graph from './Graph';
 import useFullPointGeneration from './use-full-point-generation';
+import { Highlighting } from './types';
 
 const defaultScriptEasing = `function easing(pos) {
   const n1 = 7.5625;
@@ -27,19 +33,21 @@ interface Props {}
 
 const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
   const code = useSignal(defaultScriptEasing);
+  const highlighting = useSignal<Highlighting>('js');
   const [fullPoints, codeError] = useFullPointGeneration(code);
+  const renderGraph = useComputed(() => !!fullPoints.value);
 
   return (
     <>
       <Editor
         error={codeError}
-        value={code.value}
+        code={code}
         onInput={(val) => (code.value = val)}
-        highlighting="js"
+        highlighting={highlighting}
       />
-      {fullPoints.value && (
+      {renderGraph.value && (
         <div>
-          <Graph fullPoints={fullPoints as Signal<LinearData>} />
+          <Graph fullPoints={fullPoints} />
         </div>
       )}
     </>
