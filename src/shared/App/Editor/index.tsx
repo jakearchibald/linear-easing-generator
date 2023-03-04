@@ -1,9 +1,9 @@
-import { h, Fragment, RenderableProps, FunctionComponent } from 'preact';
-import { useRef, useLayoutEffect, useCallback, useEffect } from 'preact/hooks';
+import { h, RenderableProps, FunctionComponent } from 'preact';
+import { useRef, useLayoutEffect, useEffect } from 'preact/hooks';
 import { EditorView } from 'codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { oneDark } from '@codemirror/theme-one-dark';
-import { EditorState } from '@codemirror/state';
+import { EditorState, Compartment } from '@codemirror/state';
 import { Signal, useSignalEffect } from '@preact/signals';
 import type { Highlighting } from '../types';
 
@@ -51,26 +51,26 @@ const extensions = () => [
   ]),
   EditorView.lineWrapping,
   oneDark,
-  javascript(),
 ];
 
 interface Props {
   code: Signal<string>;
   onInput?: (value: string) => void;
   error: Signal<string>;
-  highlighting: Signal<Highlighting>;
+  language: Signal<Highlighting>;
 }
 
 const Editor: FunctionComponent<Props> = ({
   code,
   onInput,
   error,
-  highlighting,
+  language,
 }: RenderableProps<Props>) => {
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const editorViewRef = useRef<EditorView | null>(null);
   const lastPropValueRef = useRef<string>('');
   const onInputRef = useRef<typeof onInput>(undefined);
+  const languageCompartment = useRef<Compartment | null>(null);
 
   useEffect(() => {
     onInputRef.current = onInput;
@@ -89,8 +89,14 @@ const Editor: FunctionComponent<Props> = ({
       },
     );
 
+    languageCompartment.current = new Compartment();
+
     editorViewRef.current = new EditorView({
-      extensions: [...extensions(), updateListener],
+      extensions: [
+        ...extensions(),
+        languageCompartment.current.of([]),
+        updateListener,
+      ],
       parent: editorContainerRef.current!,
     });
 
@@ -110,6 +116,14 @@ const Editor: FunctionComponent<Props> = ({
     });
 
     lastPropValueRef.current = code.value;
+  });
+
+  useSignalEffect(() => {
+    const extension = language.value === 'js' ? javascript() : [];
+
+    editorViewRef.current!.dispatch({
+      effects: languageCompartment.current!.reconfigure(extension),
+    });
   });
 
   return (

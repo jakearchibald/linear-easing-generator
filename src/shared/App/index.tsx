@@ -6,7 +6,7 @@ import {
   useSignalEffect,
 } from '@preact/signals';
 import Editor from './Editor';
-import { useCallback, useRef } from 'preact/hooks';
+import { useCallback, useEffect, useRef } from 'preact/hooks';
 import { processScriptEasing } from './process-script';
 import type { LinearData } from 'shared-types/index';
 import 'add-css:./styles.module.css';
@@ -37,13 +37,19 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
   const [fullPoints, codeError] = useFullPointGeneration(code);
   const renderGraph = useComputed(() => !!fullPoints.value);
 
+  useEffect(() => {
+    setTimeout(() => {
+      highlighting.value = 'svg-path';
+    }, 1000);
+  }, []);
+
   return (
     <>
       <Editor
         error={codeError}
         code={code}
         onInput={(val) => (code.value = val)}
-        highlighting={highlighting}
+        language={highlighting}
       />
       {renderGraph.value && (
         <div>
