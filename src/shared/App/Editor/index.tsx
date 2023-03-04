@@ -69,7 +69,6 @@ const Editor: FunctionComponent<Props> = ({
 }: RenderableProps<Props>) => {
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const editorViewRef = useRef<EditorView | null>(null);
-  const currentValueRef = useRef<string>('');
   const lastPropValueRef = useRef<string>('');
   const onInputRef = useRef<typeof onInput>(undefined);
 
@@ -84,7 +83,6 @@ const Editor: FunctionComponent<Props> = ({
       (update: ViewUpdate) => {
         if (!update.docChanged) return;
         const newValue = update.state.doc.toString();
-        currentValueRef.current = newValue;
         if (newValue === lastPropValueRef.current) return;
         lastPropValueRef.current = newValue;
         onInputRef.current?.(newValue);
@@ -103,20 +101,15 @@ const Editor: FunctionComponent<Props> = ({
 
   // Handle changes to the value prop
   useSignalEffect(() => {
-    lastPropValueRef.current = code.value;
-
-    // Exit early if the external component is just giving us the current value.
-    if (code.value === currentValueRef.current) return;
-
     editorViewRef.current!.dispatch({
       changes: {
         from: 0,
-        to: currentValueRef.current.length,
+        to: lastPropValueRef.current.length,
         insert: code.value,
       },
     });
 
-    currentValueRef.current = code.value;
+    lastPropValueRef.current = code.value;
   });
 
   return (
