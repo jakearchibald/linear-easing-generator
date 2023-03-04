@@ -6,7 +6,8 @@ import Graph from './Graph';
 import useFullPointGeneration from './use-full-point-generation';
 import { Highlighting } from './types';
 
-const defaultScriptEasing = `function easing(pos) {
+const defaultScriptEasing = `// Write/paste an 'easing' function:
+function easing(pos) {
   const n1 = 7.5625;
   const d1 = 2.75;
 
