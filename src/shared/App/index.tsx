@@ -1,14 +1,6 @@
 import { h, Fragment, RenderableProps, FunctionComponent } from 'preact';
-import {
-  Signal,
-  useComputed,
-  useSignal,
-  useSignalEffect,
-} from '@preact/signals';
+import { useComputed, useSignal } from '@preact/signals';
 import Editor from './Editor';
-import { useCallback, useEffect, useRef } from 'preact/hooks';
-import { processScriptEasing } from './process-script';
-import type { LinearData } from 'shared-types/index';
 import 'add-css:./styles.module.css';
 import Graph from './Graph';
 import useFullPointGeneration from './use-full-point-generation';
@@ -36,12 +28,6 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
   const highlighting = useSignal<Highlighting>('js');
   const [fullPoints, codeError] = useFullPointGeneration(code);
   const renderGraph = useComputed(() => !!fullPoints.value);
-
-  useEffect(() => {
-    setTimeout(() => {
-      highlighting.value = 'svg-path';
-    }, 1000);
-  }, []);
 
   return (
     <>
