@@ -2,6 +2,8 @@ import { Signal, useComputed } from '@preact/signals';
 import { h, Fragment, RenderableProps, FunctionComponent } from 'preact';
 import { useRef, useLayoutEffect, useCallback } from 'preact/hooks';
 import { LinearData } from 'shared-types/index';
+import 'add-css:./styles.module.css';
+import * as styles from './styles.module.css';
 
 interface Props {
   fullPoints: Signal<LinearData | null>;
@@ -18,7 +20,7 @@ const Graph: FunctionComponent<Props> = ({
   });
 
   return (
-    <svg viewBox="0 0 1 1">
+    <svg class={styles.graphSvg} viewBox="0 0 1 1">
       <path d={fullPointsPath} stroke="red" fill="none" stroke-width="0.005" />
     </svg>
   );
