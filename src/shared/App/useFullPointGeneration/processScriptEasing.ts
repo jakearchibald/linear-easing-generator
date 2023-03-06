@@ -1,6 +1,6 @@
-import * as styles from './styles.module.css';
-import { doAbortable } from './utils';
-import type { LinearData } from 'shared-types/index';
+import * as styles from '../styles.module.css';
+import { doAbortable } from '../utils';
+import type { LinearData, PostMessageError } from 'shared-types/index';
 
 const [iframe, loaded] = (() => {
   if (__PRERENDER__) return [null, null];
@@ -17,7 +17,26 @@ const [iframe, loaded] = (() => {
 
 let queue: Promise<any> = Promise.resolve();
 
-export function processScriptEasing(
+export class ProcessScriptEasingError extends Error {
+  fileName?: string;
+  lineNumber?: number;
+  columnNumber?: number;
+  functionName?: string;
+
+  constructor(postMessageError: PostMessageError) {
+    super(postMessageError.message);
+    this.name = 'ProcessScriptEasingError';
+
+    if ('fileName' in postMessageError) {
+      this.fileName = postMessageError.fileName;
+      this.lineNumber = postMessageError.lineNumber;
+      this.columnNumber = postMessageError.columnNumber;
+      this.functionName = postMessageError.functionName;
+    }
+  }
+}
+
+export default function processScriptEasing(
   signal: AbortSignal,
   script: string,
 ): Promise<LinearData> {
@@ -38,7 +57,7 @@ export function processScriptEasing(
 
         const resultPromise = new Promise<LinearData>((resolve, reject) => {
           port1.onmessage = ({ data }) => {
-            if (data.error) reject(data.error);
+            if (data.error) reject(new ProcessScriptEasingError(data.error));
             else resolve(data.result);
 
             done();

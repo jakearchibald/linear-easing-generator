@@ -1,7 +1,10 @@
 import { Signal, useSignal, useSignalEffect } from '@preact/signals';
 import { useRef } from 'preact/hooks';
 import { LinearData } from 'shared-types/index';
-import { processScriptEasing } from './process-script';
+import {
+  default as processScriptEasing,
+  ProcessScriptEasingError,
+} from './processScriptEasing';
 
 const processingDebounce = 300;
 
@@ -31,7 +34,22 @@ export default function useFullPointGeneration(
       } catch (error) {
         if ((error as Error).name === 'AbortError') return;
         fullPoints.value = null;
-        codeError.value = (error as Error).message;
+
+        if (error instanceof ProcessScriptEasingError) {
+          let errorString = error.message;
+          if (
+            error.fileName &&
+            error.fileName.startsWith('data:') &&
+            error.lineNumber &&
+            error.columnNumber
+          ) {
+            errorString += ` at line ${error.lineNumber}, column ${error.columnNumber}`;
+          }
+
+          codeError.value = errorString;
+        } else {
+          codeError.value = (error as Error).message;
+        }
       }
     }
 

@@ -1,5 +1,5 @@
 import workerURL from 'entry-url:workers/process-script';
-import { ProcessScriptData } from 'shared-types/index';
+import { ProcessScriptData, PostMessageError } from 'shared-types/index';
 
 // Null origins can't create workers from an external resource,
 // so we need to fetch the script and create a blob URL.
@@ -38,12 +38,15 @@ onmessage = async ({ data }) => {
   if (typeof data !== 'object' || data === null) return;
 
   if (isProcessJSData(data)) {
-    // Throw is worker is already running.
+    // Throw if worker is already running.
     // This action needs a fresh worker, as user script may break it.
     try {
       startWorker();
     } catch (error) {
-      data.port.postMessage({ error });
+      const postMessageError: PostMessageError = {
+        message: (error as Error).message,
+      };
+      data.port.postMessage({ error: postMessageError });
       throw error;
     }
 

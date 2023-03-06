@@ -3,7 +3,7 @@ import { useComputed, useSignal } from '@preact/signals';
 import Editor from './Editor';
 import 'add-css:./styles.module.css';
 import Graph from './Graph';
-import useFullPointGeneration from './use-full-point-generation';
+import useFullPointGeneration from './useFullPointGeneration';
 import { Highlighting } from './types';
 
 const defaultScriptEasing = `// Write/paste an 'easing' function:

@@ -1,4 +1,5 @@
-import { ProcessScriptData } from 'shared-types/index';
+import { ProcessScriptData, PostMessageError } from 'shared-types/index';
+import parseStack from './error-stack-parser';
 
 function isProcessScriptData(data: any): data is ProcessScriptData {
   return data.action === 'process-script';
@@ -11,9 +12,8 @@ const pointsLength = 10_000;
 function processScriptData(script: string) {
   const oldGlobals = Object.keys(self);
 
-  // Indirect eval, so it happens in the global scope.
-  // http://perfectionkills.com/global-eval-what-are-the-options/
-  (1, eval)(script);
+  // Using importScripts rather than eval, as it gives better stack traces.
+  importScripts(`data:text/javascript,${encodeURIComponent(script)}`);
 
   let easingFunc: EasingFunc | undefined;
 
@@ -27,8 +27,6 @@ function processScriptData(script: string) {
 
     if (newGlobals.size === 1) {
       const [key] = newGlobals;
-      // @ts-ignore
-      const potentialFunc = key in self && typeof self[key] === 'function';
 
       // @ts-ignore
       if (key in self && typeof self[key] === 'function') {
@@ -58,7 +56,8 @@ onmessage = ({ data }) => {
     const { port, script } = data;
 
     if (used) {
-      port.postMessage({ error: Error('Worker already used') });
+      const error: PostMessageError = { message: 'Worker already used' };
+      port.postMessage({ error });
       return;
     }
 
@@ -68,7 +67,11 @@ onmessage = ({ data }) => {
       const points = processScriptData(script);
       port.postMessage({ result: points });
     } catch (error) {
-      port.postMessage({ error });
+      const errorDetails: PostMessageError = {
+        ...parseStack(error as Error),
+        message: (error as Error).message,
+      };
+      port.postMessage({ error: errorDetails });
       throw error;
     }
   }
