@@ -5,6 +5,9 @@ import 'add-css:./styles.module.css';
 import Graph from './Graph';
 import useFullPointGeneration from './useFullPointGeneration';
 import { Highlighting } from './types';
+import Optim from './Optim';
+import useOptimizedPoints from './useOptimizedPoints';
+import { useLayoutEffect } from 'preact/hooks';
 
 const defaultScriptEasing = `// Write/paste an 'easing' function:
 function easing(pos) {
@@ -27,8 +30,14 @@ interface Props {}
 const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
   const code = useSignal(defaultScriptEasing);
   const highlighting = useSignal<Highlighting>('js');
+  const simplify = useSignal(0.002);
+  const round = useSignal(3);
+
   const [fullPoints, codeError] = useFullPointGeneration(code);
-  const renderGraph = useComputed(() => !!fullPoints.value);
+  const optimizedPoints = useOptimizedPoints(fullPoints, simplify, round);
+  const renderGraph = useComputed(
+    () => !!fullPoints.value && !!optimizedPoints.value,
+  );
 
   return (
     <>
@@ -38,11 +47,19 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
         onInput={(val) => (code.value = val)}
         language={highlighting}
       />
-      {renderGraph.value && (
-        <div>
-          <Graph fullPoints={fullPoints} />
-        </div>
-      )}
+      <div>
+        {renderGraph.value && (
+          <Graph fullPoints={fullPoints} optimizedPoints={optimizedPoints} />
+        )}
+        <Optim
+          onInput={(newSimplify, newRound) => {
+            simplify.value = newSimplify;
+            round.value = newRound;
+          }}
+          round={round}
+          simplify={simplify}
+        />
+      </div>
     </>
   );
 };

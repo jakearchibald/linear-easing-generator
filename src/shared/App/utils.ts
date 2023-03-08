@@ -1,15 +1,3 @@
-import { useEffect, useRef } from 'preact/hooks';
-
-export function usePrevious<T>(value: T): T | null {
-  const ref = useRef<T | null>(null);
-
-  useEffect(() => {
-    ref.current = value;
-  }, [value]);
-
-  return ref.current;
-}
-
 export function doAbortable<R>(
   signal: AbortSignal,
   callback: (
