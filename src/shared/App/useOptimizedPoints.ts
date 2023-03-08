@@ -1,4 +1,4 @@
-import { Signal, useSignalEffect } from '@preact/signals';
+import { Signal, useComputed, useSignalEffect } from '@preact/signals';
 import { LinearData } from 'shared-types/index';
 
 // square distance from a point to a segment
@@ -75,22 +75,8 @@ export default function useOptimizedPoints(
   simplify: Signal<number>,
   round: Signal<number>,
 ): Signal<LinearData | null> {
-  const optimizedPoints = new Signal<LinearData | null>(null);
-
-  useSignalEffect(() => {
-    if (!fullPoints.value) {
-      optimizedPoints.value = null;
-      return;
-    }
-
-    // TODO: apply rounding first
-    const simplifiedPoints = simplifyDouglasPeucker(
-      fullPoints.value,
-      simplify.value,
-    );
-
-    optimizedPoints.value = simplifiedPoints;
+  return useComputed(() => {
+    if (!fullPoints.value) return null;
+    return simplifyDouglasPeucker(fullPoints.value, simplify.value);
   });
-
-  return optimizedPoints;
 }
