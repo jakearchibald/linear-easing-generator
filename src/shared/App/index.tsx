@@ -4,11 +4,12 @@ import Editor from './Editor';
 import 'add-css:./styles.module.css';
 import Graph from './Graph';
 import useFullPointGeneration from './useFullPointGeneration';
-import { Highlighting } from './types';
+import { CodeType } from './types';
 import Optim from './Optim';
 import useOptimizedPoints from './useOptimizedPoints';
 import { useLayoutEffect } from 'preact/hooks';
 import Result from './Result';
+import InputType from './InputType';
 
 const defaultScriptEasing = `// Write/paste an 'easing' function:
 function easing(pos) {
@@ -26,15 +27,23 @@ function easing(pos) {
   }
 }`;
 
+const defaultSVGEasing = `M 0,0
+C 0.05, 0, 0.133333, 0.06, 0.166666, 0.4
+C 0.208333, 0.82, 0.25, 1, 1, 1`;
+
 interface Props {}
 
 const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
-  const code = useSignal(defaultScriptEasing);
-  const highlighting = useSignal<Highlighting>('js');
+  const codeType = useSignal(CodeType.JS);
+  const jsCode = useSignal(defaultScriptEasing);
+  const svgCode = useSignal(defaultSVGEasing);
+  const code = useComputed(() =>
+    codeType.value === CodeType.JS ? jsCode.value : svgCode.value,
+  );
   const simplify = useSignal(0.002);
   const round = useSignal(3);
 
-  const [fullPoints, codeError] = useFullPointGeneration(code);
+  const [fullPoints, codeError] = useFullPointGeneration(code, codeType);
   const optimizedPoints = useOptimizedPoints(fullPoints, simplify, round);
   const renderGraph = useComputed(
     () => !!fullPoints.value && !!optimizedPoints.value,
@@ -42,11 +51,16 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
 
   return (
     <>
+      <InputType type={codeType} onChange={(val) => (codeType.value = val)} />
       <Editor
         error={codeError}
         code={code}
-        onInput={(val) => (code.value = val)}
-        language={highlighting}
+        onInput={(val) =>
+          codeType.value === CodeType.JS
+            ? (jsCode.value = val)
+            : (svgCode.value = val)
+        }
+        language={codeType}
       />
       <div>
         {renderGraph.value && (

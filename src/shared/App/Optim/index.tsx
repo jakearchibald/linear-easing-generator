@@ -17,15 +17,17 @@ const Optim: FunctionComponent<Props> = ({
 }: RenderableProps<Props>) => {
   const simplifyRef = useRef<HTMLInputElement>(null);
   const roundRef = useRef<HTMLInputElement>(null);
-  const onRangeInput = useCallback(() => {
-    onInput(
-      simplifyRef.current!.valueAsNumber,
-      roundRef.current!.valueAsNumber,
-    );
-  }, []);
 
   return (
-    <form class={styles.form}>
+    <form
+      class={styles.form}
+      onInput={() => {
+        onInput(
+          simplifyRef.current!.valueAsNumber,
+          roundRef.current!.valueAsNumber,
+        );
+      }}
+    >
       <label>
         <span>Simplify</span>
         <input
@@ -35,7 +37,6 @@ const Optim: FunctionComponent<Props> = ({
           max="0.025"
           step="any"
           value={simplify}
-          onInput={onRangeInput}
         />
       </label>
       <label>
@@ -47,7 +48,6 @@ const Optim: FunctionComponent<Props> = ({
           max="5"
           step="1"
           value={round}
-          onInput={onRangeInput}
         />
       </label>
     </form>

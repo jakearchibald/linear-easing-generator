@@ -1,1 +1,4 @@
-export type Highlighting = 'js' | 'svg-path';
+export const enum CodeType {
+  JS,
+  SVG,
+}

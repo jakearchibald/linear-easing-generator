@@ -1,6 +1,7 @@
 import { Signal, useSignal, useSignalEffect } from '@preact/signals';
 import { useRef } from 'preact/hooks';
 import { LinearData } from 'shared-types/index';
+import { CodeType } from '../types';
 import {
   default as processScriptEasing,
   ProcessScriptEasingError,
@@ -10,6 +11,7 @@ const processingDebounce = 300;
 
 export default function useFullPointGeneration(
   code: Signal<string>,
+  type: Signal<CodeType>,
 ): [linearData: Signal<LinearData | null>, codeError: Signal<string>] {
   const fullPoints = useSignal<LinearData | null>(null);
   const codeError = useSignal<string>('');

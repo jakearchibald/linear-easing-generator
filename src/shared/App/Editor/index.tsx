@@ -5,7 +5,7 @@ import { javascript } from '@codemirror/lang-javascript';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { EditorState, Compartment } from '@codemirror/state';
 import { Signal, useSignalEffect } from '@preact/signals';
-import type { Highlighting } from '../types';
+import { CodeType } from '../types';
 
 import {
   lineNumbers,
@@ -57,7 +57,7 @@ interface Props {
   code: Signal<string>;
   onInput?: (value: string) => void;
   error: Signal<string>;
-  language: Signal<Highlighting>;
+  language: Signal<CodeType>;
 }
 
 const Editor: FunctionComponent<Props> = ({
@@ -121,7 +121,7 @@ const Editor: FunctionComponent<Props> = ({
   });
 
   useSignalEffect(() => {
-    const extension = language.value === 'js' ? javascript() : [];
+    const extension = language.value === CodeType.JS ? javascript() : [];
 
     editorViewRef.current!.dispatch({
       effects: languageCompartment.current!.reconfigure(extension),
