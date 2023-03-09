@@ -1,4 +1,5 @@
 import type { LinearData } from 'shared-types/index';
+import { svgPathProperties as SVGPathProperties } from 'svg-path-properties';
 
 const pointsLength = 10_000;
 const waitFrame = () =>
@@ -12,14 +13,8 @@ export default async function processSVGEasing(
 
   path = path.replaceAll('\n', ' ');
 
-  if (!CSS.supports(`clip-path: path("${path}")`)) {
-    throw new TypeError('Invalid path data');
-  }
-
-  const pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  pathEl.setAttribute('d', path);
-
-  const totalLength = pathEl.getTotalLength();
+  const parsedPath = new SVGPathProperties(path);
+  const totalLength = parsedPath.getTotalLength();
 
   if (totalLength === 0) throw new TypeError('Path is zero length');
 
@@ -40,7 +35,7 @@ export default async function processSVGEasing(
     }
 
     const pos = (i / (pointsLength - 1)) * totalLength;
-    const point = pathEl.getPointAtLength(pos);
+    const point = parsedPath.getPointAtLength(pos);
 
     // Prevent paths going back on themselves
     lastX = Math.max(lastX, point.x);
