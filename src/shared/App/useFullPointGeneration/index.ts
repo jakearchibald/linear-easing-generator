@@ -19,8 +19,11 @@ export default function useFullPointGeneration(
   const currentProcessingControllerRef = useRef<AbortController | null>(null);
   const processingTimeoutRef = useRef<number>(0);
   const firstProcessRef = useRef(true);
+  const lastCodeTypeRef = useRef<CodeType | null>(null);
 
   useSignalEffect(() => {
+    const lastCodeType = lastCodeTypeRef.current;
+    lastCodeTypeRef.current = type.value;
     const currentCode = code.value;
     currentProcessingControllerRef.current?.abort();
     clearTimeout(processingTimeoutRef.current);
@@ -59,8 +62,10 @@ export default function useFullPointGeneration(
       }
     }
 
-    // Don't debounce the first call
-    if (firstProcessRef.current) {
+    // Don't debounce the first call, or if code type changes
+    if (firstProcessRef.current || type.value !== lastCodeType) {
+      fullPoints.value = null;
+      codeError.value = '';
       process();
     } else {
       processingTimeoutRef.current = (
