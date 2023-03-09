@@ -39,7 +39,7 @@ function processScriptData(script: string) {
   if (!easingFunc) throw Error('Cannot find `easing` function on global');
 
   return Array.from({ length: pointsLength }, (_, i) => {
-    const pos = i / pointsLength;
+    const pos = i / (pointsLength - 1);
     return [pos, Number(easingFunc!(pos))];
   });
 }

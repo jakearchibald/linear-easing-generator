@@ -6,6 +6,7 @@ import {
   default as processScriptEasing,
   ProcessScriptEasingError,
 } from './processScriptEasing';
+import processSVGEasing from './processSVGEasing';
 
 const processingDebounce = 300;
 
@@ -28,7 +29,8 @@ export default function useFullPointGeneration(
       firstProcessRef.current = false;
       currentProcessingControllerRef.current = new AbortController();
       try {
-        fullPoints.value = await processScriptEasing(
+        const processor = CodeType.JS ? processScriptEasing : processSVGEasing;
+        fullPoints.value = await processor(
           currentProcessingControllerRef.current.signal,
           currentCode,
         );
