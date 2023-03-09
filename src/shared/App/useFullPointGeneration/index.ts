@@ -29,7 +29,9 @@ export default function useFullPointGeneration(
       firstProcessRef.current = false;
       currentProcessingControllerRef.current = new AbortController();
       try {
-        const processor = CodeType.JS ? processScriptEasing : processSVGEasing;
+        const processor =
+          type.value === CodeType.JS ? processScriptEasing : processSVGEasing;
+
         fullPoints.value = await processor(
           currentProcessingControllerRef.current.signal,
           currentCode,
