@@ -77,6 +77,14 @@ export default function useOptimizedPoints(
 ): Signal<LinearData | null> {
   return useComputed(() => {
     if (!fullPoints.value) return null;
-    return simplifyDouglasPeucker(fullPoints.value, simplify.value);
+    // x is represented as a percentage, so no point rounding less than 2 places
+    const xRounding = Math.max(round.value, 2);
+
+    return simplifyDouglasPeucker(fullPoints.value, simplify.value).map(
+      ([x, y]) => [
+        Math.round(x * 10 ** xRounding) / 10 ** xRounding,
+        Math.round(y * 10 ** round.value) / 10 ** round.value,
+      ],
+    ) as LinearData;
   });
 }

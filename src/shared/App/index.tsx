@@ -8,6 +8,7 @@ import { Highlighting } from './types';
 import Optim from './Optim';
 import useOptimizedPoints from './useOptimizedPoints';
 import { useLayoutEffect } from 'preact/hooks';
+import Result from './Result';
 
 const defaultScriptEasing = `// Write/paste an 'easing' function:
 function easing(pos) {
@@ -59,6 +60,7 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
           round={round}
           simplify={simplify}
         />
+        <Result round={round} points={optimizedPoints} />
       </div>
     </>
   );
