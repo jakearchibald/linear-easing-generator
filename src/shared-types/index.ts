@@ -4,6 +4,12 @@ export interface ProcessScriptData {
   port: MessagePort;
 }
 
+export interface ProcessSVGData {
+  action: 'process-svg';
+  script: string;
+  port: MessagePort;
+}
+
 export type LinearData = [pos: number, val: number][];
 
 export interface BasicStackDetails {

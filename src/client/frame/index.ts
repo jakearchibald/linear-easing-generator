@@ -13,6 +13,10 @@ function isProcessJSData(data: any): data is ProcessScriptData {
   return data.action === 'process-script';
 }
 
+function isProcessSVGData(data: any): data is ProcessScriptData {
+  return data.action === 'process-svg';
+}
+
 function isTerminateWorkerAction(
   data: any,
 ): data is { action: 'terminate-worker' } {
@@ -37,7 +41,7 @@ async function terminateWorker() {
 onmessage = async ({ data }) => {
   if (typeof data !== 'object' || data === null) return;
 
-  if (isProcessJSData(data)) {
+  if (isProcessJSData(data) || isProcessSVGData(data)) {
     // Throw if worker is already running.
     // This action needs a fresh worker, as user script may break it.
     try {

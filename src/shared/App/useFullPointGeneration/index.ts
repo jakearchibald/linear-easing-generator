@@ -3,10 +3,9 @@ import { useRef } from 'preact/hooks';
 import { LinearData } from 'shared-types/index';
 import { CodeType } from '../types';
 import {
-  default as processScriptEasing,
+  default as processEasing,
   ProcessScriptEasingError,
-} from './processScriptEasing';
-import processSVGEasing from './processSVGEasing';
+} from './processEasing';
 
 const processingDebounce = 300;
 
@@ -32,12 +31,10 @@ export default function useFullPointGeneration(
       firstProcessRef.current = false;
       currentProcessingControllerRef.current = new AbortController();
       try {
-        const processor =
-          type.value === CodeType.JS ? processScriptEasing : processSVGEasing;
-
-        fullPoints.value = await processor(
+        fullPoints.value = await processEasing(
           currentProcessingControllerRef.current.signal,
           currentCode,
+          type.value,
         );
         codeError.value = '';
       } catch (error) {

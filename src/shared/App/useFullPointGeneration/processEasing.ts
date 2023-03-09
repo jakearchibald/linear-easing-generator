@@ -1,6 +1,7 @@
 import * as styles from '../styles.module.css';
 import { doAbortable } from '../utils';
 import type { LinearData, PostMessageError } from 'shared-types/index';
+import { CodeType } from '../types';
 
 const [iframe, loaded] = (() => {
   if (__PRERENDER__) return [null, null];
@@ -39,6 +40,7 @@ export class ProcessScriptEasingError extends Error {
 export default function processScriptEasing(
   signal: AbortSignal,
   script: string,
+  type: CodeType,
 ): Promise<LinearData> {
   return (queue = queue
     .catch(() => {})
@@ -65,7 +67,11 @@ export default function processScriptEasing(
         });
 
         iframe!.contentWindow!.postMessage(
-          { action: 'process-script', script, port: port2 },
+          {
+            action: type === CodeType.JS ? 'process-script' : 'process-svg',
+            script,
+            port: port2,
+          },
           '*',
           [port2],
         );

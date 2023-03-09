@@ -1,8 +1,18 @@
-import { ProcessScriptData, PostMessageError } from 'shared-types/index';
+import {
+  ProcessScriptData,
+  PostMessageError,
+  LinearData,
+  ProcessSVGData,
+} from 'shared-types/index';
 import parseStack from './error-stack-parser';
+import { svgPathProperties as SVGPathProperties } from 'svg-path-properties';
 
 function isProcessScriptData(data: any): data is ProcessScriptData {
   return data.action === 'process-script';
+}
+
+function isProcessSVGData(data: any): data is ProcessSVGData {
+  return data.action === 'process-svg';
 }
 
 type EasingFunc = (value: number) => unknown;
@@ -44,6 +54,26 @@ function processScriptData(script: string) {
   });
 }
 
+function processSVGData(pathData: string) {
+  const parsedPath = new SVGPathProperties(pathData);
+  const totalLength = parsedPath.getTotalLength();
+
+  if (totalLength === 0) throw new TypeError('Path is zero length');
+
+  let lastX = -Infinity;
+
+  const points: LinearData = Array.from({ length: pointsLength }, (_, i) => {
+    const pos = (i / (pointsLength - 1)) * totalLength;
+    const point = parsedPath.getPointAtLength(pos);
+
+    // Prevent paths going back on themselves
+    lastX = Math.max(lastX, point.x);
+    return [lastX, point.y];
+  });
+
+  return points;
+}
+
 let used = false;
 
 onmessage = ({ data }) => {
@@ -52,7 +82,7 @@ onmessage = ({ data }) => {
   if (origin !== 'null') return;
   if (typeof data !== 'object' || data === null) return;
 
-  if (isProcessScriptData(data)) {
+  if (isProcessScriptData(data) || isProcessSVGData(data)) {
     const { port, script } = data;
 
     if (used) {
@@ -64,7 +94,10 @@ onmessage = ({ data }) => {
     used = true;
 
     try {
-      const points = processScriptData(script);
+      const points =
+        data.action === 'process-svg'
+          ? processSVGData(script)
+          : processScriptData(script);
       port.postMessage({ result: points });
     } catch (error) {
       const errorDetails: PostMessageError = {
