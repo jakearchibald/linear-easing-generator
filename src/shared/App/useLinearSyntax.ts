@@ -1,17 +1,11 @@
-import { Signal, useComputed } from '@preact/signals';
-import { h, Fragment, RenderableProps, FunctionComponent } from 'preact';
+import { Signal, useComputed, useSignalEffect } from '@preact/signals';
 import { LinearData } from 'shared-types/index';
 
-interface Props {
-  points: Signal<LinearData | null>;
-  round: Signal<number>;
-}
-
-const Result: FunctionComponent<Props> = ({
-  points,
-  round,
-}: RenderableProps<Props>) => {
-  const value = useComputed(() => {
+export default function useLinearSyntax(
+  points: Signal<LinearData | null>,
+  round: Signal<number>,
+): Signal<string> {
+  return useComputed(() => {
     if (!points.value) return '';
     const xFormat = new Intl.NumberFormat('en-US', {
       maximumFractionDigits: Math.max(round.value - 2, 0),
@@ -91,53 +85,4 @@ const Result: FunctionComponent<Props> = ({
 
     return `linear(${outputValues.join(', ')})`;
   });
-
-  return <p>{value}</p>;
-};
-
-export { Result as default };
-
-/*
-
-// Cycle through fixed points
-// If first item, and x is 0, eliminate x
-// If last item, and (x is 1 and last item is less than 1), or x is same as last item, eliminate
-// If x is average of previous two points, eliminate
-
-const indexesWithRedundantX = new Set();
-
-for (const [i, point] of fixedPoints.entries()) {
-  if (i === 0) {
-    if (point[0] === '0') {
-      indexesWithRedundantX.add(i);
-    }
-    continue;
-  }
-  if (i === fixedPoints.length - 1) {
-    const previous = easingPoints[i - 1].input;
-    if (previous <= 1) {
-      indexesWithRedundantX.add(i);
-    }
-    continue;
-  }
-
-  const previous = easingPoints[i - 1].input;
-  const next = easingPoints[i + 1].input;
-
-  if (((next - previous) / 2 + previous).toFixed(fixed).replace(trailingZeros, '') === point[0]) {
-    indexesWithRedundantX.add(i);
-  }
 }
-
-let outputTest = 'linear(';
-for (const [i, point] of fixedPoints.entries()) {
-  if (i !== 0) outputTest += ', ';
-  outputTest += point[1];
-
-  if (!indexesWithRedundantX.has(i)) {
-    outputTest += ' ' + (simplePoints[i][0] * 100).toFixed(Math.max(fixed - 2, 0)).replace(trailingZeros, '') + '%';
-  }
-}
-
-output.textContent = outputTest + ')';
-*/

@@ -7,9 +7,8 @@ import useFullPointGeneration from './useFullPointGeneration';
 import { CodeType } from './types';
 import Optim from './Optim';
 import useOptimizedPoints from './useOptimizedPoints';
-import { useLayoutEffect } from 'preact/hooks';
-import Result from './Result';
 import InputType from './InputType';
+import useLinearSyntax from './useLinearSyntax';
 
 const defaultScriptEasing = `// Write/paste an 'easing' function:
 function easing(pos) {
@@ -48,6 +47,7 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
   const renderGraph = useComputed(
     () => !!fullPoints.value && !!optimizedPoints.value,
   );
+  const linear = useLinearSyntax(optimizedPoints, round);
 
   return (
     <>
@@ -74,7 +74,7 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
           round={round}
           simplify={simplify}
         />
-        <Result round={round} points={optimizedPoints} />
+        <p>{linear}</p>
       </div>
     </>
   );
