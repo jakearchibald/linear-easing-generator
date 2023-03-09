@@ -28,12 +28,14 @@ export default async function processSVGEasing(
   const points: LinearData = [];
 
   await waitFrame();
+  signal.throwIfAborted();
   let workStart = performance.now();
 
   for (let i = 0; i < pointsLength; i++) {
     // Split the work into 16ms chunks, since this is really expensive for some reason
     if (performance.now() - workStart > 16) {
       await waitFrame();
+      signal.throwIfAborted();
       workStart = performance.now();
     }
 
