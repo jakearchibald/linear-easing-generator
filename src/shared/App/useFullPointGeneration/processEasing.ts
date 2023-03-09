@@ -46,7 +46,18 @@ export default function processScriptEasing(
     .catch(() => {})
     .then(() =>
       doAbortable(signal, async (setAbortAction) => {
+        // Check for validity of SVG on the main thread.
+        // The parser in the worker is too permissive.
+        if (type === CodeType.SVG) {
+          if (
+            !CSS.supports(`clip-path: path("${script.replaceAll('\n', ' ')}")`)
+          ) {
+            throw new TypeError('Invalid SVG path');
+          }
+        }
+
         const { port1, port2 } = new MessageChannel();
+
         await loaded;
 
         const done = () =>

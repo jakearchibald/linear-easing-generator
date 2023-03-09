@@ -47,6 +47,10 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
   const renderGraph = useComputed(
     () => !!fullPoints.value && !!optimizedPoints.value,
   );
+  // Just pass through the original SVG for the graph, if the input is SVG
+  const graphFullPoints = useComputed(() =>
+    codeType.value === CodeType.JS ? fullPoints.value : code.value,
+  );
   const linear = useLinearSyntax(optimizedPoints, round);
 
   return (
@@ -64,7 +68,10 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
       />
       <div>
         {renderGraph.value && (
-          <Graph fullPoints={fullPoints} optimizedPoints={optimizedPoints} />
+          <Graph
+            fullPoints={graphFullPoints}
+            optimizedPoints={optimizedPoints}
+          />
         )}
         <Optim
           onInput={(newSimplify, newRound) => {
