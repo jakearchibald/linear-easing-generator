@@ -29,7 +29,7 @@ export default function useLinearSyntax(
       // If the last entry's position is 1, and the item before it is less than 1, then we don't need to state the position
       if (i === pointsValue.length - 1) {
         const previous = pointsValue[i - 1][0];
-        if (previous <= 1) valuesWithRedundantX.add(value);
+        if (x === 1 && previous <= 1) valuesWithRedundantX.add(value);
         continue;
       }
 
