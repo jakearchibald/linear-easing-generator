@@ -37,7 +37,7 @@ export class ProcessScriptEasingError extends Error {
   }
 }
 
-export default function processScriptEasing(
+export default function processEasing(
   signal: AbortSignal,
   script: string,
   type: CodeType,

@@ -1,0 +1,22 @@
+.demos {
+  --demo-box-size: 100px;
+  --demo-duration: 2s;
+}
+
+.demo-box {
+  width: var(--demo-box-size);
+  height: var(--demo-box-size);
+  background-color: green;
+  color: white;
+}
+
+.translate {
+  width: 50%;
+  background: #333;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.translate > div {
+  margin-right: var(--demo-box-size);
+}

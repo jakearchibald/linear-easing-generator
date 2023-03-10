@@ -9,6 +9,7 @@ import Optim from './Optim';
 import useOptimizedPoints from './useOptimizedPoints';
 import InputType from './InputType';
 import useLinearSyntax from './useLinearSyntax';
+import Demos from './Demos';
 
 const defaultScriptEasing = `// Write/paste an 'easing' function:
 function easing(pos) {
@@ -44,7 +45,7 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
 
   const [fullPoints, codeError] = useFullPointGeneration(code, codeType);
   const optimizedPoints = useOptimizedPoints(fullPoints, simplify, round);
-  const renderGraph = useComputed(
+  const outputReady = useComputed(
     () => !!fullPoints.value && !!optimizedPoints.value,
   );
   // Just pass through the original SVG for the graph, if the input is SVG
@@ -52,6 +53,17 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
     codeType.value === CodeType.JS ? fullPoints.value : code.value,
   );
   const linear = useLinearSyntax(optimizedPoints, round);
+
+  // Create slightly optimized version for the demos
+  const slightlyOptimizedPoints = useOptimizedPoints(
+    fullPoints,
+    useSignal(0.00001),
+    useSignal(5),
+  );
+  const slightlyOptimizedLinear = useLinearSyntax(
+    slightlyOptimizedPoints,
+    useSignal(5),
+  );
 
   return (
     <>
@@ -66,23 +78,24 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
         }
         language={codeType}
       />
-      <div>
-        {renderGraph.value && (
-          <Graph
-            fullPoints={graphFullPoints}
-            optimizedPoints={optimizedPoints}
-          />
-        )}
-        <Optim
-          onInput={(newSimplify, newRound) => {
-            simplify.value = newSimplify;
-            round.value = newRound;
-          }}
-          round={round}
-          simplify={simplify}
+      {outputReady.value && (
+        <Graph fullPoints={graphFullPoints} optimizedPoints={optimizedPoints} />
+      )}
+      <Optim
+        onInput={(newSimplify, newRound) => {
+          simplify.value = newSimplify;
+          round.value = newRound;
+        }}
+        round={round}
+        simplify={simplify}
+      />
+      <p>{linear}</p>
+      {outputReady.value && (
+        <Demos
+          linear={linear}
+          slightlyOptimizedLinear={slightlyOptimizedLinear}
         />
-        <p>{linear}</p>
-      </div>
+      )}
     </>
   );
 };
