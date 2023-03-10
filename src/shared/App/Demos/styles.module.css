@@ -1,6 +1,7 @@
 .demos {
   --demo-box-size: 100px;
   --demo-duration: 2s;
+  overflow: hidden;
 }
 
 .demo-box {
@@ -8,13 +9,18 @@
   height: var(--demo-box-size);
   background-color: green;
   color: white;
+  display: grid;
+  align-content: center;
+  justify-content: center;
 }
 
 .translate {
   width: 50%;
   background: #333;
   margin: 0 auto;
-  overflow: hidden;
+  display: grid;
+  gap: 20px;
+  padding: 20px 0;
 }
 
 .translate > div {

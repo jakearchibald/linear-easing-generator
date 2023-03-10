@@ -2,4 +2,6 @@
   max-height: 413px;
   width: 100%;
   display: block;
+  margin: 50px 0;
+  overflow: visible;
 }
