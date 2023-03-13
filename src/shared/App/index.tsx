@@ -4,7 +4,7 @@ import Editor from './Editor';
 import 'add-css:./styles.module.css';
 import Graph from './Graph';
 import useFullPointGeneration from './useFullPointGeneration';
-import { CodeType } from './types';
+import { CodeHighlight, CodeType } from './types';
 import Optim from './Optim';
 import useOptimizedPoints from './useOptimizedPoints';
 import InputType from './InputType';
@@ -41,6 +41,9 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
   const code = useComputed(() =>
     codeType.value === CodeType.JS ? jsCode.value : svgCode.value,
   );
+  const editorHighlight = useComputed(() =>
+    codeType.value == CodeType.JS ? CodeHighlight.JS : CodeHighlight.SVG,
+  );
   const simplify = useSignal(0.002);
   const round = useSignal(3);
 
@@ -66,8 +69,7 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
     useSignal(5),
   );
   const friendlyExample = useFriendlyLinearCode(linear);
-  const emptyError = useSignal('');
-  const exampleHighlight = useSignal(CodeType.SVG);
+  const exampleHighlight = useSignal(CodeHighlight.CSS);
 
   return (
     <>
@@ -80,7 +82,7 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
             ? (jsCode.value = val)
             : (svgCode.value = val)
         }
-        language={codeType}
+        language={editorHighlight}
       />
       {outputReady.value && (
         <Graph fullPoints={graphFullPoints} optimizedPoints={optimizedPoints} />
@@ -93,11 +95,7 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
         round={round}
         simplify={simplify}
       />
-      <Editor
-        code={friendlyExample}
-        error={emptyError}
-        language={exampleHighlight}
-      />
+      <Editor code={friendlyExample} language={exampleHighlight} readOnly />
       {outputReady.value && (
         <Demos
           linear={linear}

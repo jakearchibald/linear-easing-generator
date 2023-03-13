@@ -8,6 +8,7 @@
     "serve": "serve --cors .tmp/build/static"
   },
   "devDependencies": {
+    "@codemirror/lang-css": "^6.1.1",
     "@codemirror/lang-javascript": "^6.1.4",
     "@codemirror/theme-one-dark": "^6.1.1",
     "@preact/signals": "^1.1.3",

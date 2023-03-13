@@ -2,10 +2,11 @@ import { h, RenderableProps, FunctionComponent } from 'preact';
 import { useRef, useLayoutEffect, useEffect } from 'preact/hooks';
 import { EditorView } from 'codemirror';
 import { javascript } from '@codemirror/lang-javascript';
+import { cssLanguage } from '@codemirror/lang-css';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { EditorState, Compartment } from '@codemirror/state';
 import { Signal, useSignalEffect } from '@preact/signals';
-import { CodeType } from '../types';
+import { CodeHighlight, CodeType } from '../types';
 
 import {
   lineNumbers,
@@ -57,20 +58,29 @@ interface Props {
   code: Signal<string>;
   onInput?: (value: string) => void;
   error?: Signal<string>;
-  language: Signal<CodeType>;
+  language: Signal<CodeHighlight>;
+  readOnly?: boolean;
 }
+
+const highlighting = {
+  [CodeHighlight.JS]: javascript,
+  [CodeHighlight.CSS]: () => cssLanguage,
+  [CodeHighlight.SVG]: () => [],
+} as const;
 
 const Editor: FunctionComponent<Props> = ({
   code,
   onInput,
   error,
   language,
+  readOnly,
 }: RenderableProps<Props>) => {
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const editorViewRef = useRef<EditorView | null>(null);
   const lastPropValueRef = useRef<string>('');
   const onInputRef = useRef<typeof onInput>(undefined);
   const languageCompartment = useRef<Compartment | null>(null);
+  const readOnlyCompartment = useRef<Compartment | null>(null);
 
   useEffect(() => {
     onInputRef.current = onInput;
@@ -90,11 +100,13 @@ const Editor: FunctionComponent<Props> = ({
     );
 
     languageCompartment.current = new Compartment();
+    readOnlyCompartment.current = new Compartment();
 
     editorViewRef.current = new EditorView({
       extensions: [
         ...extensions(),
         languageCompartment.current.of([]),
+        readOnlyCompartment.current.of([]),
         updateListener,
       ],
       parent: editorContainerRef.current!,
@@ -121,17 +133,25 @@ const Editor: FunctionComponent<Props> = ({
   });
 
   useSignalEffect(() => {
-    const extension = language.value === CodeType.JS ? javascript() : [];
-
     editorViewRef.current!.dispatch({
-      effects: languageCompartment.current!.reconfigure(extension),
+      effects: languageCompartment.current!.reconfigure(
+        highlighting[language.value](),
+      ),
     });
   });
+
+  useEffect(() => {
+    editorViewRef.current!.dispatch({
+      effects: readOnlyCompartment.current!.reconfigure(
+        EditorState.readOnly.of(readOnly || false),
+      ),
+    });
+  }, [readOnly]);
 
   return (
     <div>
       <div ref={editorContainerRef} />
-      <div>{error}</div>
+      <div>{error || ''}</div>
     </div>
   );
 };
