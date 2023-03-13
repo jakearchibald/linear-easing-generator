@@ -5,7 +5,7 @@ import { javascript } from '@codemirror/lang-javascript';
 import { cssLanguage } from '@codemirror/lang-css';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { EditorState, Compartment } from '@codemirror/state';
-import { Signal, useSignalEffect } from '@preact/signals';
+import { ReadonlySignal, Signal, useSignalEffect } from '@preact/signals';
 import { CodeHighlight, CodeType } from '../types';
 
 import {
@@ -55,10 +55,10 @@ const extensions = () => [
 ];
 
 interface Props {
-  code: Signal<string>;
+  code: ReadonlySignal<string>;
   onInput?: (value: string) => void;
-  error?: Signal<string>;
-  language: Signal<CodeHighlight>;
+  error?: ReadonlySignal<string>;
+  language: ReadonlySignal<CodeHighlight>;
   readOnly?: boolean;
 }
 

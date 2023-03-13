@@ -1,5 +1,5 @@
 import { h, Fragment, RenderableProps, FunctionComponent } from 'preact';
-import { useComputed, useSignal, useSignalEffect } from '@preact/signals';
+import { useComputed, useSignal, signal } from '@preact/signals';
 import Editor from './Editor';
 import 'add-css:./styles.module.css';
 import Graph from './Graph';
@@ -57,6 +57,7 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
     codeType.value === CodeType.JS ? fullPoints.value : code.value,
   );
   const linear = useLinearSyntax(optimizedPoints, round);
+  const friendlyExample = useFriendlyLinearCode(linear);
 
   // Create slightly optimized version for the demos
   const slightlyOptimizedPoints = useOptimizedPoints(
@@ -68,8 +69,6 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
     slightlyOptimizedPoints,
     useSignal(5),
   );
-  const friendlyExample = useFriendlyLinearCode(linear);
-  const exampleHighlight = useSignal(CodeHighlight.CSS);
 
   return (
     <>
@@ -95,7 +94,11 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
         round={round}
         simplify={simplify}
       />
-      <Editor code={friendlyExample} language={exampleHighlight} readOnly />
+      <Editor
+        code={friendlyExample}
+        language={signal(CodeHighlight.CSS)}
+        readOnly
+      />
       {outputReady.value && (
         <Demos
           linear={linear}
