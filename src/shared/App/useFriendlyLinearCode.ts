@@ -6,8 +6,10 @@ export default function useFriendlyLinearCode(
   return useComputed(() => {
     if (parts.value.length === 0) return '';
 
-    let outputStart = ':root {\n  --easing: linear(';
-    let outputEnd = ');\n}';
+    let outputStart = ':root {\n';
+    let linearStart = '  --custom-easing: linear(';
+    let linearEnd = ');';
+    let outputEnd = '\n}';
     let lines = [];
     let line = '';
 
@@ -22,10 +24,21 @@ export default function useFriendlyLinearCode(
 
     if (line) lines.push(line);
 
-    if (lines.length === 1) {
-      return outputStart + lines[0] + outputEnd;
+    if (
+      lines.length === 1 &&
+      linearStart.length + lines[0].length + linearEnd.length < 80
+    ) {
+      return outputStart + linearStart + lines[0] + linearEnd + outputEnd;
     }
 
-    return outputStart + '\n    ' + lines.join('\n    ') + '\n  ' + outputEnd;
+    return (
+      outputStart +
+      linearStart +
+      '\n    ' +
+      lines.join('\n    ') +
+      '\n  ' +
+      linearEnd +
+      outputEnd
+    );
   });
 }

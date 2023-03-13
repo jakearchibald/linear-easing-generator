@@ -11,8 +11,6 @@ import InputType from './InputType';
 import useLinearSyntax from './useLinearSyntax';
 import Demos from './Demos';
 import useFriendlyLinearCode from './useFriendlyLinearCode';
-import { logSignalUpdates } from './utils';
-import { useEffect } from 'preact/hooks';
 
 const defaultScriptEasing = `// Write/paste an 'easing' function:
 function easing(pos) {
@@ -95,7 +93,6 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
         round={round}
         simplify={simplify}
       />
-      <p>{linear}</p>
       <Editor
         code={friendlyExample}
         error={emptyError}
