@@ -1,5 +1,5 @@
 import { h, Fragment, RenderableProps, FunctionComponent } from 'preact';
-import { useComputed, useSignal } from '@preact/signals';
+import { useComputed, useSignal, useSignalEffect } from '@preact/signals';
 import Editor from './Editor';
 import 'add-css:./styles.module.css';
 import Graph from './Graph';
@@ -10,6 +10,9 @@ import useOptimizedPoints from './useOptimizedPoints';
 import InputType from './InputType';
 import useLinearSyntax from './useLinearSyntax';
 import Demos from './Demos';
+import useFriendlyLinearCode from './useFriendlyLinearCode';
+import { logSignalUpdates } from './utils';
+import { useEffect } from 'preact/hooks';
 
 const defaultScriptEasing = `// Write/paste an 'easing' function:
 function easing(pos) {
@@ -64,6 +67,9 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
     slightlyOptimizedPoints,
     useSignal(5),
   );
+  const friendlyExample = useFriendlyLinearCode(linear);
+  const emptyError = useSignal('');
+  const exampleHighlight = useSignal(CodeType.SVG);
 
   return (
     <>
@@ -90,6 +96,11 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
         simplify={simplify}
       />
       <p>{linear}</p>
+      <Editor
+        code={friendlyExample}
+        error={emptyError}
+        language={exampleHighlight}
+      />
       {outputReady.value && (
         <Demos
           linear={linear}

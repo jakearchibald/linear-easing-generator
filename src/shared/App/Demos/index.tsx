@@ -5,8 +5,8 @@ import * as styles from './styles.module.css';
 import { useEffect, useRef } from 'preact/hooks';
 
 interface Props {
-  linear: Signal<string>;
-  slightlyOptimizedLinear: Signal<string>;
+  linear: Signal<string[]>;
+  slightlyOptimizedLinear: Signal<string[]>;
 }
 
 const duration = 2000;
@@ -22,10 +22,15 @@ const anim = (
   keyframes: Keyframe[] | PropertyIndexedKeyframes,
 ) => el.animate(keyframes, { ...animOpts, easing }).finished;
 
+const useLinearValue = (linear: Signal<string[]>) =>
+  useComputed(() => `linear(${linear.value.join()})`);
+
 const Demos: FunctionComponent<Props> = ({
   slightlyOptimizedLinear,
   linear,
 }: RenderableProps<Props>) => {
+  const slightlyOptimizedLinearStr = useLinearValue(slightlyOptimizedLinear);
+  const linearStr = useLinearValue(linear);
   const demos = useRef<HTMLDivElement>(null);
   const slightlyOptimizedTranslateEl = useRef<HTMLDivElement>(null);
   const translateEl = useRef<HTMLDivElement>(null);
@@ -38,12 +43,12 @@ const Demos: FunctionComponent<Props> = ({
         await Promise.all([
           anim(
             slightlyOptimizedTranslateEl.current!,
-            slightlyOptimizedLinear.value,
+            slightlyOptimizedLinearStr.value,
             {
               transform: ['translateX(0)', 'translateX(100%)'],
             },
           ),
-          anim(translateEl.current!, linear.value, {
+          anim(translateEl.current!, linearStr.value, {
             transform: ['translateX(0)', 'translateX(100%)'],
           }),
         ]);
@@ -55,12 +60,12 @@ const Demos: FunctionComponent<Props> = ({
         await Promise.all([
           anim(
             slightlyOptimizedTranslateEl.current!,
-            slightlyOptimizedLinear.value,
+            slightlyOptimizedLinearStr.value,
             {
               transform: ['translateX(100%)', 'translateX(0)'],
             },
           ),
-          anim(translateEl.current!, linear.value, {
+          anim(translateEl.current!, linearStr.value, {
             transform: ['translateX(100%)', 'translateX(0)'],
           }),
         ]);
@@ -73,7 +78,8 @@ const Demos: FunctionComponent<Props> = ({
   }, []);
 
   useSignalEffect(() => {
-    if (slightlyOptimizedLinear.value === '' || linear.value === '') return;
+    if (slightlyOptimizedLinearStr.value === '' || linearStr.value === '')
+      return;
 
     const slightly = [slightlyOptimizedTranslateEl.current!].flatMap((el) =>
       el.getAnimations(),
@@ -81,11 +87,11 @@ const Demos: FunctionComponent<Props> = ({
     const optim = [translateEl.current!].flatMap((el) => el.getAnimations());
 
     for (const anim of slightly) {
-      anim.effect!.updateTiming({ easing: slightlyOptimizedLinear.value });
+      anim.effect!.updateTiming({ easing: slightlyOptimizedLinearStr.value });
     }
 
     for (const anim of optim) {
-      anim.effect!.updateTiming({ easing: linear.value });
+      anim.effect!.updateTiming({ easing: linearStr.value });
     }
   });
 

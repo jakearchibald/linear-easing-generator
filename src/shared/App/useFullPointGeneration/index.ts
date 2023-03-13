@@ -31,11 +31,12 @@ export default function useFullPointGeneration(
       firstProcessRef.current = false;
       currentProcessingControllerRef.current = new AbortController();
       try {
-        fullPoints.value = await processEasing(
+        const val = await processEasing(
           currentProcessingControllerRef.current.signal,
           currentCode,
           type.value,
         );
+        fullPoints.value = val;
         codeError.value = '';
       } catch (error) {
         if ((error as Error).name === 'AbortError') return;

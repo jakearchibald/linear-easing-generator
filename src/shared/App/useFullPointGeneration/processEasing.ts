@@ -71,7 +71,9 @@ export default function processEasing(
         const resultPromise = new Promise<LinearData>((resolve, reject) => {
           port1.onmessage = ({ data }) => {
             if (data.error) reject(new ProcessScriptEasingError(data.error));
-            else resolve(data.result);
+            else {
+              resolve(data.result);
+            }
 
             done();
           };

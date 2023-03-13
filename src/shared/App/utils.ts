@@ -1,3 +1,5 @@
+import { Signal, useSignalEffect } from '@preact/signals';
+
 export function doAbortable<R>(
   signal: AbortSignal,
   callback: (
@@ -25,5 +27,13 @@ export function doAbortable<R>(
   ]).finally(() => {
     signal.removeEventListener('abort', listener);
     return onAbortReturn;
+  });
+}
+
+export function logSignalUpdates(signals: { [name: string]: Signal<any> }) {
+  useSignalEffect(() => {
+    for (const [name, signal] of Object.entries(signals)) {
+      console.log(name, signal.value);
+    }
   });
 }

@@ -4,9 +4,9 @@ import { LinearData } from 'shared-types/index';
 export default function useLinearSyntax(
   points: Signal<LinearData | null>,
   round: Signal<number>,
-): Signal<string> {
+): Signal<string[]> {
   return useComputed(() => {
-    if (!points.value) return '';
+    if (!points.value) return [];
     const xFormat = new Intl.NumberFormat('en-US', {
       maximumFractionDigits: Math.max(round.value - 2, 0),
     });
@@ -83,6 +83,6 @@ export default function useLinearSyntax(
       return skipValue.length > regularValue.length ? regularValue : skipValue;
     });
 
-    return `linear(${outputValues.join(', ')})`;
+    return outputValues;
   });
 }

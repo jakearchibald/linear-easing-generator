@@ -56,7 +56,7 @@ const extensions = () => [
 interface Props {
   code: Signal<string>;
   onInput?: (value: string) => void;
-  error: Signal<string>;
+  error?: Signal<string>;
   language: Signal<CodeType>;
 }
 
