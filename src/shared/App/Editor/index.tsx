@@ -5,7 +5,12 @@ import { javascript } from '@codemirror/lang-javascript';
 import { cssLanguage } from '@codemirror/lang-css';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { EditorState, Compartment } from '@codemirror/state';
-import { ReadonlySignal, Signal, useSignalEffect } from '@preact/signals';
+import {
+  ReadonlySignal,
+  signal,
+  Signal,
+  useSignalEffect,
+} from '@preact/signals';
 import { CodeHighlight, CodeType } from '../types';
 
 import {
@@ -71,7 +76,7 @@ const highlighting = {
 const Editor: FunctionComponent<Props> = ({
   code,
   onInput,
-  error,
+  error = signal(''),
   language,
   readOnly,
 }: RenderableProps<Props>) => {
@@ -121,15 +126,17 @@ const Editor: FunctionComponent<Props> = ({
   useSignalEffect(() => {
     if (code.value === lastPropValueRef.current) return;
 
+    const currentLength = lastPropValueRef.current.length;
+
+    lastPropValueRef.current = code.value;
+
     editorViewRef.current!.dispatch({
       changes: {
         from: 0,
-        to: lastPropValueRef.current.length,
+        to: currentLength,
         insert: code.value,
       },
     });
-
-    lastPropValueRef.current = code.value;
   });
 
   useSignalEffect(() => {
@@ -151,7 +158,7 @@ const Editor: FunctionComponent<Props> = ({
   return (
     <div>
       <div ref={editorContainerRef} />
-      <div>{error || ''}</div>
+      <div>{error}</div>
     </div>
   );
 };
