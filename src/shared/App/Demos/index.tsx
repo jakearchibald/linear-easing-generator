@@ -23,7 +23,9 @@ const anim = (
 ) => el.animate(keyframes, { ...animOpts, easing }).finished;
 
 const useLinearValue = (linear: Signal<string[]>) =>
-  useComputed(() => `linear(${linear.value.join()})`);
+  useComputed(() =>
+    linear.value.length === 0 ? '' : `linear(${linear.value.join()})`,
+  );
 
 const Demos: FunctionComponent<Props> = ({
   slightlyOptimizedLinear,
