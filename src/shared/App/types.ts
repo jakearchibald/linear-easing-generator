@@ -8,3 +8,11 @@ export const enum CodeHighlight {
   SVG,
   CSS,
 }
+
+export interface State {
+  codeType: CodeType;
+  jsCode: string;
+  svgCode: string;
+  simplify: number;
+  round: number;
+}

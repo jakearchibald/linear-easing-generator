@@ -1,34 +1,8 @@
 import { ReadonlySignal, Signal, useSignal, batch } from '@preact/signals';
 import { useCallback, useMemo } from 'preact/hooks';
-import { CodeType } from './types';
-
-const defaultScriptEasing = `// Write/paste an 'easing' function:
-function easing(pos) {
-  const n1 = 7.5625;
-  const d1 = 2.75;
-
-  if (pos < 1 / d1) {
-    return n1 * pos * pos;
-  } else if (pos < 2 / d1) {
-    return n1 * (pos -= 1.5 / d1) * pos + 0.75;
-  } else if (pos < 2.5 / d1) {
-    return n1 * (pos -= 2.25 / d1) * pos + 0.9375;
-  } else {
-    return n1 * (pos -= 2.625 / d1) * pos + 0.984375;
-  }
-}`;
-
-const defaultSVGEasing = `M 0,0
-C 0.05, 0, 0.133333, 0.06, 0.166666, 0.4
-C 0.208333, 0.82, 0.25, 1, 1, 1`;
-
-interface State {
-  codeType: CodeType;
-  jsCode: string;
-  svgCode: string;
-  simplify: number;
-  round: number;
-}
+import { CodeType, State } from './types';
+import { bounce, materialEmphasized } from './demos';
+import { getURLParamsFromState } from './utils';
 
 interface UseURLStateReturn {
   codeType: ReadonlySignal<CodeType>;
@@ -74,23 +48,6 @@ function getStateFromURL(): Partial<State> {
   return output;
 }
 
-function getURLParamsFromState(state: State) {
-  const params = new URLSearchParams();
-
-  if (state.codeType === CodeType.JS) {
-    params.set('codeType', 'js');
-    params.set('code', state.jsCode);
-  } else if (state.codeType === CodeType.SVG) {
-    params.set('codeType', 'svg');
-    params.set('code', state.svgCode);
-  }
-
-  params.set('simplify', state.simplify.toString());
-  params.set('round', state.round.toString());
-
-  return params;
-}
-
 export default function useURLState(): UseURLStateReturn {
   const originalURLState = useMemo(getStateFromURL, []);
   const defaultCodeType = originalURLState.codeType || CodeType.JS;
@@ -100,13 +57,13 @@ export default function useURLState(): UseURLStateReturn {
   const jsCode = useSignal(
     defaultCodeType === CodeType.JS && originalURLState.jsCode !== undefined
       ? originalURLState.jsCode
-      : defaultScriptEasing,
+      : bounce.jsCode!,
   );
 
   const svgCode = useSignal(
     defaultCodeType === CodeType.SVG && originalURLState.svgCode !== undefined
       ? originalURLState.svgCode
-      : defaultSVGEasing,
+      : materialEmphasized.svgCode!,
   );
 
   const simplify = useSignal(originalURLState.simplify ?? 0.002);

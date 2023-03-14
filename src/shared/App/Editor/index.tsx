@@ -5,13 +5,8 @@ import { javascript } from '@codemirror/lang-javascript';
 import { cssLanguage } from '@codemirror/lang-css';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { EditorState, Compartment } from '@codemirror/state';
-import {
-  ReadonlySignal,
-  signal,
-  Signal,
-  useSignalEffect,
-} from '@preact/signals';
-import { CodeHighlight, CodeType } from '../types';
+import { ReadonlySignal, signal, useSignalEffect } from '@preact/signals';
+import { CodeHighlight } from '../types';
 
 import {
   lineNumbers,

@@ -1,4 +1,5 @@
 import { Signal, useSignalEffect } from '@preact/signals';
+import { CodeType, State } from './types';
 
 export function doAbortable<R>(
   signal: AbortSignal,
@@ -36,4 +37,24 @@ export function logSignalUpdates(signals: { [name: string]: Signal<any> }) {
       console.log(name, signal.value);
     }
   });
+}
+
+export function getURLParamsFromState(state: Partial<State>) {
+  const params = new URLSearchParams();
+
+  if (state.codeType === CodeType.JS) {
+    params.set('codeType', 'js');
+    if (state.jsCode !== undefined) params.set('code', state.jsCode);
+  } else if (state.codeType === CodeType.SVG) {
+    params.set('codeType', 'svg');
+    if (state.svgCode !== undefined) params.set('code', state.svgCode);
+  }
+
+  if (state.simplify !== undefined) {
+    params.set('simplify', state.simplify.toString());
+  }
+
+  if (state.round !== undefined) params.set('round', state.round.toString());
+
+  return params;
 }

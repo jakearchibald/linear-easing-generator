@@ -9,9 +9,10 @@ import Optim from './Optim';
 import useOptimizedPoints from './useOptimizedPoints';
 import InputType from './InputType';
 import useLinearSyntax from './useLinearSyntax';
-import Demos from './Demos';
+import AnimatedDemos from './AnimatedDemos';
 import useFriendlyLinearCode from './useFriendlyLinearCode';
 import useURLState from './useURLState';
+import DemoLinks from './ DemoLinks';
 
 interface Props {}
 
@@ -50,6 +51,7 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
 
   return (
     <>
+      <DemoLinks onStateUpdate={(newState) => update(newState)} />
       <InputType
         type={codeType}
         onChange={(val) => update({ codeType: val })}
@@ -83,7 +85,7 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
         readOnly
       />
       {outputReady.value && (
-        <Demos
+        <AnimatedDemos
           linear={linear}
           slightlyOptimizedLinear={slightlyOptimizedLinear}
         />
