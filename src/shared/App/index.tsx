@@ -12,7 +12,7 @@ import useLinearSyntax from './useLinearSyntax';
 import AnimatedDemos from './AnimatedDemos';
 import useFriendlyLinearCode from './useFriendlyLinearCode';
 import useURLState from './useURLState';
-import DemoLinks from './ DemoLinks';
+import DemoLinks from './DemoLinks';
 
 interface Props {}
 
