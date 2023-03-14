@@ -50,11 +50,15 @@ function simplifyDPStep(
   }
 
   if (maxSqDist > sqTolerance) {
-    if (index! - first > 1)
+    if (index! - first > 1) {
       simplifyDPStep(points, first, index!, sqTolerance, simplified);
+    }
+
     simplified.push(points[index!]);
-    if (last - index! > 1)
+
+    if (last - index! > 1) {
       simplifyDPStep(points, index!, last, sqTolerance, simplified);
+    }
   }
 }
 
