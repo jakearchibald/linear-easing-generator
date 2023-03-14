@@ -13,6 +13,7 @@ import AnimatedDemos from './AnimatedDemos';
 import useFriendlyLinearCode from './useFriendlyLinearCode';
 import useURLState from './useURLState';
 import DemoLinks from './DemoLinks';
+import CopyButton from './CopyButton';
 
 interface Props {}
 
@@ -84,6 +85,7 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
         language={signal(CodeHighlight.CSS)}
         readOnly
       />
+      <CopyButton value={friendlyExample} />
       {outputReady.value && (
         <AnimatedDemos
           linear={linear}
