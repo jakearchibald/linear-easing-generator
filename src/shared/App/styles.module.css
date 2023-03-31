@@ -16,14 +16,20 @@
 }
 
 .section-header-title {
+  display: grid;
+  grid-auto-flow: row;
+  gap: 0.5rem;
+
   h2 {
     margin: 0;
     font-weight: normal;
     font-size: 1.5rem;
+    line-height: 1;
   }
 
   p {
     margin: 0;
     font-size: 0.9rem;
+    line-height: 1;
   }
 }

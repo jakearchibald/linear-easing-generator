@@ -2,12 +2,12 @@ import { Signal, useComputed, useSignalEffect } from '@preact/signals';
 import { h, RenderableProps, FunctionComponent } from 'preact';
 import { useRef } from 'preact/hooks';
 import { CodeHighlight, CodeType } from '../types';
-import InputType from './InputType';
 import Editor from '../Editor';
 import 'add-css:./styles.module.css';
 import * as styles from './styles.module.css';
 import * as sharedStyles from '../styles.module.css';
 import { bounce, materialEmphasized } from '../demos';
+import Select from '../Select';
 
 function useCachedFormatCodes(
   code: Signal<string>,
@@ -43,8 +43,13 @@ const Input: FunctionComponent<Props> = ({
   const editorHighlight = useComputed(() =>
     codeType.value == CodeType.JS ? CodeHighlight.JS : CodeHighlight.SVG,
   );
-
+  const codeTypeString = useComputed(() => String(codeType.value));
   const lastCodes = useCachedFormatCodes(code, codeType);
+
+  function onSelectChange(newVal: string) {
+    const newValNum = Number(newVal) as CodeType;
+    onChange(lastCodes[newValNum].current, newValNum);
+  }
 
   return (
     <div>
@@ -57,10 +62,10 @@ const Input: FunctionComponent<Props> = ({
           <h2>Input</h2>
           <p>Provide easing as JavaScript or SVG</p>
         </div>
-        <InputType
-          type={codeType}
-          onChange={(val) => onChange(lastCodes[val].current, val)}
-        />
+        <Select value={codeTypeString} onChange={onSelectChange}>
+          <option value={CodeType.JS}>JS</option>
+          <option value={CodeType.SVG}>SVG</option>
+        </Select>
       </div>
       <Editor
         error={error}
