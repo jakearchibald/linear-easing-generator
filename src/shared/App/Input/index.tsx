@@ -1,11 +1,31 @@
-import { Signal, useComputed } from '@preact/signals';
+import { Signal, useComputed, useSignalEffect } from '@preact/signals';
 import { h, RenderableProps, FunctionComponent } from 'preact';
+import { useRef } from 'preact/hooks';
 import { CodeHighlight, CodeType } from '../types';
 import InputType from './InputType';
 import Editor from '../Editor';
 import 'add-css:./styles.module.css';
 import * as styles from './styles.module.css';
 import * as sharedStyles from '../styles.module.css';
+import { bounce, materialEmphasized } from '../demos';
+
+function useCachedFormatCodes(
+  code: Signal<string>,
+  codeType: Signal<CodeType>,
+) {
+  const lastJSCode = useRef(bounce.code);
+  const lastSVGCode = useRef(materialEmphasized.code);
+
+  useSignalEffect(() => {
+    if (codeType.value === CodeType.JS) {
+      lastJSCode.current = code.value;
+    } else {
+      lastSVGCode.current = code.value;
+    }
+  });
+
+  return { [CodeType.JS]: lastJSCode, [CodeType.SVG]: lastSVGCode };
+}
 
 interface Props {
   code: Signal<string>;
@@ -24,6 +44,8 @@ const Input: FunctionComponent<Props> = ({
     codeType.value == CodeType.JS ? CodeHighlight.JS : CodeHighlight.SVG,
   );
 
+  const lastCodes = useCachedFormatCodes(code, codeType);
+
   return (
     <div>
       <div
@@ -37,7 +59,7 @@ const Input: FunctionComponent<Props> = ({
         </div>
         <InputType
           type={codeType}
-          onChange={(val) => onChange(code.value, val)}
+          onChange={(val) => onChange(lastCodes[val].current, val)}
         />
       </div>
       <Editor
