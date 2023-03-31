@@ -7,25 +7,18 @@ import useFullPointGeneration from './useFullPointGeneration';
 import { CodeHighlight, CodeType } from './types';
 import Optim from './Optim';
 import useOptimizedPoints from './useOptimizedPoints';
-import InputType from './InputType';
 import useLinearSyntax from './useLinearSyntax';
 import AnimatedDemos from './AnimatedDemos';
 import useFriendlyLinearCode from './useFriendlyLinearCode';
 import useURLState from './useURLState';
 import DemoLinks from './DemoLinks';
 import CopyButton from './CopyButton';
+import Input from './Input';
 
 interface Props {}
 
 const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
-  const { codeType, jsCode, svgCode, simplify, round, update } = useURLState();
-
-  const code = useComputed(() =>
-    codeType.value === CodeType.JS ? jsCode.value : svgCode.value,
-  );
-  const editorHighlight = useComputed(() =>
-    codeType.value == CodeType.JS ? CodeHighlight.JS : CodeHighlight.SVG,
-  );
+  const { codeType, code, simplify, round, update } = useURLState();
 
   const [fullPoints, codeError] = useFullPointGeneration(code, codeType);
   const optimizedPoints = useOptimizedPoints(fullPoints, simplify, round);
@@ -52,21 +45,17 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
 
   return (
     <>
-      <DemoLinks onStateUpdate={(newState) => update(newState)} />
-      <InputType
-        type={codeType}
-        onChange={(val) => update({ codeType: val })}
-      />
-      <Editor
-        error={codeError}
-        code={code}
-        onInput={(val) =>
-          codeType.value === CodeType.JS
-            ? update({ jsCode: val })
-            : update({ svgCode: val })
-        }
-        language={editorHighlight}
-      />
+      <div>
+        <Input
+          code={code}
+          codeType={codeType}
+          error={codeError}
+          onChange={(code, codeType) => update({ code, codeType })}
+        />
+      </div>
+      {/*
+
+      <DemoLinks onStateUpdate={(newState) => update(newSta
       {outputReady.value && (
         <Graph fullPoints={graphFullPoints} optimizedPoints={optimizedPoints} />
       )}
@@ -92,6 +81,7 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
           slightlyOptimizedLinear={slightlyOptimizedLinear}
         />
       )}
+      */}
     </>
   );
 };

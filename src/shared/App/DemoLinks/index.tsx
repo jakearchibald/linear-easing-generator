@@ -19,7 +19,7 @@ const DemoLinks: FunctionComponent<Props> = ({
   onStateUpdate,
 }: RenderableProps<Props>) => {
   return (
-    <ul>
+    <ul style={{ display: 'none' }}>
       {Object.entries(demos).map(([name, demo]) => (
         <li>
           <a

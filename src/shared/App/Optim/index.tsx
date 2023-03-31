@@ -20,6 +20,7 @@ const Optim: FunctionComponent<Props> = ({
 
   return (
     <form
+      style={{ display: 'none' }}
       class={styles.form}
       onInput={() => {
         onInput(

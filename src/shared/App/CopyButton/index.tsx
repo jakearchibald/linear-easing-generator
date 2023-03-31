@@ -9,7 +9,10 @@ const CopyButton: FunctionComponent<Props> = ({
   value,
 }: RenderableProps<Props>) => {
   return (
-    <button onClick={() => navigator.clipboard.writeText(value.value)}>
+    <button
+      style={{ display: 'none' }}
+      onClick={() => navigator.clipboard.writeText(value.value)}
+    >
       Copy
     </button>
   );

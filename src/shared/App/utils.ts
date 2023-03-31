@@ -44,11 +44,11 @@ export function getURLParamsFromState(state: Partial<State>) {
 
   if (state.codeType === CodeType.JS) {
     params.set('codeType', 'js');
-    if (state.jsCode !== undefined) params.set('code', state.jsCode);
   } else if (state.codeType === CodeType.SVG) {
     params.set('codeType', 'svg');
-    if (state.svgCode !== undefined) params.set('code', state.svgCode);
   }
+
+  if (state.code) params.set('code', state.code);
 
   if (state.simplify !== undefined) {
     params.set('simplify', state.simplify.toString());

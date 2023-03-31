@@ -6,3 +6,24 @@
   left: 0;
   top: -1000px;
 }
+
+.section-header {
+  background: var(--surface-1);
+  min-height: 100px;
+  padding: 0 var(--content-side-padding);
+  display: grid;
+  align-items: center;
+}
+
+.section-header-title {
+  h2 {
+    margin: 0;
+    font-weight: normal;
+    font-size: 1.5rem;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+}

@@ -11,8 +11,7 @@ export const enum CodeHighlight {
 
 export interface State {
   codeType: CodeType;
-  jsCode: string;
-  svgCode: string;
+  code: string;
   simplify: number;
   round: number;
 }

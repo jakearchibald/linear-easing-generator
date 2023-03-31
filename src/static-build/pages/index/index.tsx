@@ -21,6 +21,7 @@ import socialImageURL from 'url:static-build/assets/social-large.png';
 // import ogImage from 'url:static-build/assets/icon-large-maskable.png';
 import { escapeStyleScriptContent, siteOrigin } from 'static-build/utils';
 import App from 'shared/App';
+import Header from './Header';
 
 interface Props {}
 
@@ -58,6 +59,7 @@ const Index: FunctionalComponent<Props> = () => (
       <script src={analyticsUrl} async />
     </head>
     <body>
+      <Header />
       <div id="app">
         <App />
       </div>

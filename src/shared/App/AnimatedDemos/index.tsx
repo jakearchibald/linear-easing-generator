@@ -123,7 +123,7 @@ const Demos: FunctionComponent<Props> = ({
   });
 
   return (
-    <>
+    <div style={{ display: 'none' }}>
       <p>
         <label>
           Duration:{' '}
@@ -149,7 +149,7 @@ const Demos: FunctionComponent<Props> = ({
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

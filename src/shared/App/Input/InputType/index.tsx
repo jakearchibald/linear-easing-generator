@@ -1,7 +1,7 @@
 import { Signal, useComputed } from '@preact/signals';
 import { h, Fragment, RenderableProps, FunctionComponent } from 'preact';
 import { useRef, useLayoutEffect, useCallback } from 'preact/hooks';
-import { CodeType } from '../types';
+import { CodeType } from '../../types';
 
 interface Props {
   type: Signal<CodeType>;

@@ -36,7 +36,7 @@ const Graph: FunctionComponent<Props> = ({
   );
 
   return (
-    <svg class={styles.graphSvg} viewBox="0 0 1 1">
+    <svg style={{ display: 'none' }} class={styles.graphSvg} viewBox="0 0 1 1">
       <path
         style={fullPathStyle}
         d={fullPointsPath}

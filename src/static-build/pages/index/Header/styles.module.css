@@ -1,0 +1,11 @@
+.site-header {
+  background: var(--surface-1);
+  padding: 0 calc(var(--ui-side-margin) + var(--content-side-padding));
+}
+
+.site-title {
+  color: var(--accent);
+  font-size: 1.7rem;
+  margin: 0;
+  padding: 0.9rem 0;
+}

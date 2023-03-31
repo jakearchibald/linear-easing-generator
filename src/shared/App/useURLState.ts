@@ -6,8 +6,7 @@ import { getURLParamsFromState } from './utils';
 
 interface UseURLStateReturn {
   codeType: ReadonlySignal<CodeType>;
-  jsCode: ReadonlySignal<string>;
-  svgCode: ReadonlySignal<string>;
+  code: ReadonlySignal<string>;
   simplify: ReadonlySignal<number>;
   round: ReadonlySignal<number>;
   update: (state: Partial<State>) => void;
@@ -21,17 +20,10 @@ function getStateFromURL(): Partial<State> {
 
   if (params.has('codeType')) {
     const codeType = params.get('codeType');
+    output.codeType = codeType === 'js' ? CodeType.JS : CodeType.SVG;
 
-    if (codeType === 'js') {
-      output.codeType = CodeType.JS;
-      if (params.has('code')) {
-        output.jsCode = params.get('code')!;
-      }
-    } else if (codeType === 'svg') {
-      output.codeType = CodeType.SVG;
-      if (params.has('code')) {
-        output.svgCode = params.get('code')!;
-      }
+    if (params.has('code')) {
+      output.code = params.get('code')!;
     }
   }
 
@@ -53,17 +45,9 @@ export default function useURLState(): UseURLStateReturn {
   const defaultCodeType = originalURLState.codeType || CodeType.JS;
 
   const codeType = useSignal(defaultCodeType);
-
-  const jsCode = useSignal(
-    defaultCodeType === CodeType.JS && originalURLState.jsCode !== undefined
-      ? originalURLState.jsCode
-      : bounce.jsCode!,
-  );
-
-  const svgCode = useSignal(
-    defaultCodeType === CodeType.SVG && originalURLState.svgCode !== undefined
-      ? originalURLState.svgCode
-      : materialEmphasized.svgCode!,
+  const code = useSignal(
+    originalURLState.code ||
+      (defaultCodeType === CodeType.JS ? bounce.code : materialEmphasized.code),
   );
 
   const simplify = useSignal(originalURLState.simplify ?? 0.002);
@@ -72,8 +56,7 @@ export default function useURLState(): UseURLStateReturn {
   const update = useCallback((newState: Partial<State>) => {
     batch(() => {
       if (newState.codeType !== undefined) codeType.value = newState.codeType;
-      if (newState.jsCode !== undefined) jsCode.value = newState.jsCode;
-      if (newState.svgCode !== undefined) svgCode.value = newState.svgCode;
+      if (newState.code !== undefined) code.value = newState.code;
       if (newState.simplify !== undefined) simplify.value = newState.simplify;
       if (newState.round !== undefined) round.value = newState.round;
     });
@@ -81,8 +64,7 @@ export default function useURLState(): UseURLStateReturn {
     const newURL = new URL(location.href);
     newURL.search = getURLParamsFromState({
       codeType: codeType.value,
-      jsCode: jsCode.value,
-      svgCode: svgCode.value,
+      code: code.value,
       simplify: simplify.value,
       round: round.value,
     }).toString();
@@ -93,8 +75,7 @@ export default function useURLState(): UseURLStateReturn {
   return useMemo(
     () => ({
       codeType,
-      jsCode,
-      svgCode,
+      code,
       simplify,
       round,
       update,
