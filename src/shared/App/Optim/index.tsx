@@ -1,8 +1,10 @@
 import { Signal, useComputed } from '@preact/signals';
 import { h, Fragment, RenderableProps, FunctionComponent } from 'preact';
-import { useRef, useLayoutEffect, useCallback } from 'preact/hooks';
+import { useRef, useLayoutEffect, useCallback, useEffect } from 'preact/hooks';
 import 'add-css:./styles.module.css';
 import * as styles from './styles.module.css';
+import * as sharedStyles from '../styles.module.css';
+import Range from '../Range';
 
 interface Props {
   simplify: Signal<number>;
@@ -15,39 +17,25 @@ const Optim: FunctionComponent<Props> = ({
   simplify,
   onInput,
 }: RenderableProps<Props>) => {
-  const simplifyRef = useRef<HTMLInputElement>(null);
-  const roundRef = useRef<HTMLInputElement>(null);
-
   return (
-    <form
-      style={{ display: 'none' }}
-      class={styles.form}
-      onInput={() => {
-        onInput(
-          simplifyRef.current!.valueAsNumber,
-          roundRef.current!.valueAsNumber,
-        );
-      }}
-    >
+    <form class={styles.form}>
       <label>
-        <span>Simplify</span>
-        <input
-          ref={simplifyRef}
-          type="range"
-          min="0.00001"
-          max="0.025"
+        <span class={sharedStyles.labelText}>Simplify</span>
+        <Range
+          min={0.00001}
+          max={0.025}
           step="any"
+          onInput={(newVal) => onInput(newVal, simplify.value)}
           value={simplify}
         />
       </label>
       <label>
-        <span>Round</span>
-        <input
-          ref={roundRef}
-          type="range"
-          min="1"
-          max="5"
-          step="1"
+        <span class={sharedStyles.labelText}>Round</span>
+        <Range
+          min={1}
+          max={5}
+          step={1}
+          onInput={(newVal) => onInput(round.value, newVal)}
           value={round}
         />
       </label>

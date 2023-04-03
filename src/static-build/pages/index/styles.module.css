@@ -60,13 +60,15 @@ body {
 
 :global(#app) {
   margin: var(--ui-side-margin);
-  display: grid;
-  gap: var(--ui-side-margin);
-
-  grid-template-columns: 1fr;
 
   @media (min-width: 1160px) {
-    grid-template-columns: 1fr 1fr;
+    display: grid;
+    gap: var(--ui-side-margin);
+
+    grid-template:
+      'input todo' 1fr
+      'input simplify' auto
+      / 1fr 1fr;
   }
   @media (min-width: 1820px) {
     grid-template-columns: 1fr 1fr 1fr;

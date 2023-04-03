@@ -38,8 +38,8 @@
   display: block;
 }
 
-.select-label-text,
-.select-label-text-end {
+.label-text,
+.label-text-end {
   display: block;
   text-transform: uppercase;
   font-size: 0.9rem;
@@ -47,11 +47,11 @@
   color: var(--text-2);
 }
 
-.select-label-text-end {
+.label-text-end {
   text-align: right;
 }
 
-.input-column {
+.app-module {
   display: grid;
   grid-template-rows: auto 1fr;
 }

@@ -46,12 +46,24 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
 
   return (
     <>
-      <div class={styles.inputColumn}>
+      <div class={styles.appModule} style={{ gridArea: 'input' }}>
         <Input
           code={code}
           codeType={codeType}
           error={codeError}
           onChange={(code, codeType) => update({ code, codeType })}
+        />
+      </div>
+      <div style={{ gridArea: 'simplify' }}>
+        <Optim
+          onInput={(newSimplify, newRound) =>
+            update({
+              simplify: newSimplify,
+              round: newRound,
+            })
+          }
+          round={round}
+          simplify={simplify}
         />
       </div>
       {/*
@@ -60,16 +72,6 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
       {outputReady.value && (
         <Graph fullPoints={graphFullPoints} optimizedPoints={optimizedPoints} />
       )}
-      <Optim
-        onInput={(newSimplify, newRound) =>
-          update({
-            simplify: newSimplify,
-            round: newRound,
-          })
-        }
-        round={round}
-        simplify={simplify}
-      />
       <Editor
         code={friendlyExample}
         language={signal(CodeHighlight.CSS)}

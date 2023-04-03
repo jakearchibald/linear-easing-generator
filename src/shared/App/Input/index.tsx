@@ -63,7 +63,7 @@ const Input: FunctionComponent<Props> = ({
           <p>Provide easing as JavaScript or SVG</p>
         </div>
         <label class={sharedStyles.selectLabel}>
-          <span class={sharedStyles.selectLabelTextEnd}>Format</span>
+          <span class={sharedStyles.labelTextEnd}>Format</span>
           <Select value={codeTypeString} onChange={onSelectChange}>
             <option value={CodeType.JS}>JS</option>
             <option value={CodeType.SVG}>SVG</option>

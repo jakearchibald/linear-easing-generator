@@ -1,8 +1,9 @@
 .form {
   display: grid;
-  grid-template-columns: max-content 1fr;
-}
-
-.form > label {
-  display: contents;
+  grid-template-columns: 2fr 1fr;
+  background: var(--surface-1);
+  padding: 0 var(--content-side-padding);
+  min-height: 100px;
+  align-items: center;
+  gap: 1rem;
 }

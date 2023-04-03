@@ -52,7 +52,6 @@ const extensions = () => [
     ...completionKeymap,
     indentWithTab,
   ]),
-  EditorView.lineWrapping,
   oneDark,
 ];
 

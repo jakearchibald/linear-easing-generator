@@ -1,0 +1,54 @@
+.range-component {
+  display: grid;
+
+  > * {
+    grid-area: 1/1;
+  }
+}
+
+.range-input {
+  opacity: 0;
+}
+
+.fake-range {
+  position: relative;
+  contain: layout;
+  --thumb-size: 20px;
+  height: var(--thumb-size);
+  --pos: 0.5;
+}
+
+.active-line,
+.inactive-line {
+  height: 2px;
+  background: var(--blue-1);
+  border-radius: 100px;
+  position: absolute;
+  inset: auto 0;
+  transform: translateY(-50%);
+  width: calc(100% * var(--pos));
+}
+
+.inactive-line {
+  background: var(--surface-0);
+  margin-left: auto;
+  width: calc(100% - (100% * var(--pos)));
+}
+
+.track {
+  inset: 0;
+  right: var(--thumb-size);
+}
+
+.control {
+  position: absolute;
+  left: calc(var(--pos) * 100%);
+  top: 0;
+
+  height: var(--thumb-size);
+  aspect-ratio: 1/1;
+  border-radius: 100%;
+  box-sizing: border-box;
+  background: white;
+  border: 1px solid var(--surface-0);
+}

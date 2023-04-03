@@ -1,4 +1,4 @@
-import { Signal, useSignalEffect } from '@preact/signals';
+import { Signal, useComputed, useSignalEffect } from '@preact/signals';
 import { CodeType, State } from './types';
 
 export function doAbortable<R>(
