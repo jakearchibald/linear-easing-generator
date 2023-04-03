@@ -62,10 +62,13 @@ const Input: FunctionComponent<Props> = ({
           <h2>Input</h2>
           <p>Provide easing as JavaScript or SVG</p>
         </div>
-        <Select value={codeTypeString} onChange={onSelectChange}>
-          <option value={CodeType.JS}>JS</option>
-          <option value={CodeType.SVG}>SVG</option>
-        </Select>
+        <label class={sharedStyles.selectLabel}>
+          <span class={sharedStyles.selectLabelTextEnd}>Format</span>
+          <Select value={codeTypeString} onChange={onSelectChange}>
+            <option value={CodeType.JS}>JS</option>
+            <option value={CodeType.SVG}>SVG</option>
+          </Select>
+        </label>
       </div>
       <Editor
         error={error}

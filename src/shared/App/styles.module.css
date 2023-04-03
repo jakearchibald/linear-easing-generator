@@ -33,3 +33,20 @@
     line-height: 1;
   }
 }
+
+.select-label {
+  display: block;
+}
+
+.select-label-text,
+.select-label-text-end {
+  display: block;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  margin-bottom: 0.2rem;
+  color: var(--text-2);
+}
+
+.select-label-text-end {
+  text-align: right;
+}

@@ -1,9 +1,4 @@
-import {
-  Signal,
-  useComputed,
-  useSignal,
-  useSignalEffect,
-} from '@preact/signals';
+import { Signal, useSignal } from '@preact/signals';
 import { h, RenderableProps, FunctionComponent } from 'preact';
 import { useLayoutEffect, useRef } from 'preact/hooks';
 import 'add-css:./styles.module.css';
@@ -19,7 +14,7 @@ const Select: FunctionComponent<Props> = ({
   onChange,
   children,
 }: RenderableProps<Props>) => {
-  const selectedOptionText = useSignal('');
+  const selectedOptionText = useSignal(' ');
   const selectEl = useRef<HTMLSelectElement>(null);
 
   useLayoutEffect(() => {
