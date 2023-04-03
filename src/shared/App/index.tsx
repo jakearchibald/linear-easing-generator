@@ -2,6 +2,7 @@ import { h, Fragment, RenderableProps, FunctionComponent } from 'preact';
 import { useComputed, useSignal, signal } from '@preact/signals';
 import Editor from './Editor';
 import 'add-css:./styles.module.css';
+import * as styles from './styles.module.css';
 import Graph from './Graph';
 import useFullPointGeneration from './useFullPointGeneration';
 import { CodeHighlight, CodeType } from './types';
@@ -45,7 +46,7 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
 
   return (
     <>
-      <div>
+      <div class={styles.inputColumn}>
         <Input
           code={code}
           codeType={codeType}

@@ -1,5 +1,5 @@
 import { Signal, useComputed, useSignalEffect } from '@preact/signals';
-import { h, RenderableProps, FunctionComponent } from 'preact';
+import { h, RenderableProps, FunctionComponent, Fragment } from 'preact';
 import { useRef } from 'preact/hooks';
 import { CodeHighlight, CodeType } from '../types';
 import Editor from '../Editor';
@@ -52,7 +52,7 @@ const Input: FunctionComponent<Props> = ({
   }
 
   return (
-    <div>
+    <>
       <div
         class={[sharedStyles.sectionHeader, styles.inputSectionHeader].join(
           ' ',
@@ -76,7 +76,7 @@ const Input: FunctionComponent<Props> = ({
         onInput={(val) => onChange(val, codeType.value)}
         language={editorHighlight}
       />
-    </div>
+    </>
   );
 };
 

@@ -1,0 +1,11 @@
+.component {
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
+
+.editor-container {
+  display: grid;
+}
+
+.error {
+}

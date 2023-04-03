@@ -50,3 +50,8 @@
 .select-label-text-end {
   text-align: right;
 }
+
+.input-column {
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
