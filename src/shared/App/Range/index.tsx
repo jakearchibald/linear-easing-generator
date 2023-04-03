@@ -20,12 +20,12 @@ const Range: FunctionComponent<Props> = ({
   onInput,
 }: RenderableProps<Props>) => {
   const fakeRangeStyle = useComputed(
-    () => `--pos: ${(max - min) / (value.value - min)}`,
+    () => `--pos: ${(value.value - min) / (max - min)}`,
   );
 
   return (
-    <div class={styles.rangeComponent} style={fakeRangeStyle}>
-      <div class={styles.fakeRange}>
+    <div class={styles.rangeComponent}>
+      <div aria-hidden="true" class={styles.fakeRange} style={fakeRangeStyle}>
         <div class={styles.activeLine}></div>
         <div class={styles.inactiveLine}></div>
         <div class={styles.track}>

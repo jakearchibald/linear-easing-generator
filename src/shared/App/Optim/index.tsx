@@ -25,7 +25,7 @@ const Optim: FunctionComponent<Props> = ({
           min={0.00001}
           max={0.025}
           step="any"
-          onInput={(newVal) => onInput(newVal, simplify.value)}
+          onInput={(newVal) => onInput(newVal, round.value)}
           value={simplify}
         />
       </label>
@@ -35,7 +35,7 @@ const Optim: FunctionComponent<Props> = ({
           min={1}
           max={5}
           step={1}
-          onInput={(newVal) => onInput(round.value, newVal)}
+          onInput={(newVal) => onInput(simplify.value, newVal)}
           value={round}
         />
       </label>

@@ -16,15 +16,17 @@
   --thumb-size: 20px;
   height: var(--thumb-size);
   --pos: 0.5;
+  pointer-events: none;
 }
 
 .active-line,
 .inactive-line {
-  height: 2px;
+  height: 3px;
   background: var(--blue-1);
   border-radius: 100px;
   position: absolute;
   inset: auto 0;
+  top: 50%;
   transform: translateY(-50%);
   width: calc(100% * var(--pos));
 }
@@ -36,6 +38,7 @@
 }
 
 .track {
+  position: absolute;
   inset: 0;
   right: var(--thumb-size);
 }

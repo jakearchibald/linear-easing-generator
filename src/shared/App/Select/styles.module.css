@@ -9,6 +9,7 @@
 }
 
 .select-current {
+  pointer-events: none;
   border: 1px solid var(--surface-0);
   border-radius: 4px;
   display: grid;
