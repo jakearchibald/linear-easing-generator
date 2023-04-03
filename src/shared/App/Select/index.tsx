@@ -36,9 +36,19 @@ const Select: FunctionComponent<Props> = ({
   }
 
   return (
-    <div>
-      <div>{selectedOptionText}</div>
-      <select ref={selectEl} value={value} onChange={onSelectChange}>
+    <div class={styles.select}>
+      <div class={styles.selectCurrent} aria-hidden="true">
+        <span>{selectedOptionText}</span>
+        <svg viewBox="0 0 8.65 3.02">
+          <path d="M8.57.33 4.54 2.96a.42.42 0 0 1-.43 0L.08.33a.15.15 0 0 1 0-.27.43.43 0 0 1 .43 0l3.82 2.48L8.14.05a.43.43 0 0 1 .42 0 .15.15 0 0 1 0 .28Z" />
+        </svg>
+      </div>
+      <select
+        class={styles.realSelect}
+        ref={selectEl}
+        value={value}
+        onChange={onSelectChange}
+      >
         {children}
       </select>
     </div>
