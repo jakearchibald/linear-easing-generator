@@ -53,11 +53,13 @@
 
 .app-module {
   display: grid;
+  overflow: hidden;
   grid-template-rows: auto 1fr;
 }
 
 .preview-output {
   display: grid;
+  overflow: hidden;
 
   @media (min-width: 1160px) {
     display: grid;

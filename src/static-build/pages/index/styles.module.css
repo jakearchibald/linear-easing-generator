@@ -63,6 +63,7 @@ body {
 
   @media (min-width: 1160px) {
     display: grid;
+    overflow: hidden;
     gap: var(--ui-side-margin);
 
     grid-template:
