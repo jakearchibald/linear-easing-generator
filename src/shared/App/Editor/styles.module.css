@@ -1,12 +1,17 @@
 .component {
   display: grid;
   grid-template-rows: 1fr auto;
+  overflow: hidden;
 }
 
 .editor-container {
   display: grid;
   grid-template-columns: 100%;
   overflow: hidden;
+
+  & :global(.cm-editor) {
+    overflow: hidden;
+  }
 }
 
 .error {
