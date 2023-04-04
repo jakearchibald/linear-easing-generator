@@ -66,12 +66,15 @@ body {
     gap: var(--ui-side-margin);
 
     grid-template:
-      'input todo' 1fr
+      'input preview-output' 1fr
       'input simplify' auto
       / 1fr 1fr;
   }
   @media (min-width: 1820px) {
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template:
+      'input preview-output preview-output' 1fr
+      'input simplify simplify' auto
+      / 1fr 1fr 1fr;
   }
 }
 

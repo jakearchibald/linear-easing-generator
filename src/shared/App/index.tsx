@@ -54,7 +54,22 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
           onChange={(code, codeType) => update({ code, codeType })}
         />
       </div>
-      <div style={{ gridArea: 'simplify' }}>
+      <div class={styles.previewOutput} style={{ gridArea: 'preview-output' }}>
+        <div class={styles.appModule} style={{ gridArea: 'output' }}>
+          <div class={styles.sectionHeader}>
+            <div class={styles.sectionHeaderTitle}>
+              <h2>Output</h2>
+              <p>Some shiny new CSS!</p>
+            </div>
+          </div>
+          <Editor
+            code={friendlyExample}
+            language={signal(CodeHighlight.CSS)}
+            readOnly
+          />
+        </div>
+      </div>
+      <div class={styles.appModule} style={{ gridArea: 'simplify' }}>
         <Optim
           onInput={(newSimplify, newRound) =>
             update({
@@ -72,11 +87,7 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
       {outputReady.value && (
         <Graph fullPoints={graphFullPoints} optimizedPoints={optimizedPoints} />
       )}
-      <Editor
-        code={friendlyExample}
-        language={signal(CodeHighlight.CSS)}
-        readOnly
-      />
+
       <CopyButton value={friendlyExample} />
       {outputReady.value && (
         <AnimatedDemos

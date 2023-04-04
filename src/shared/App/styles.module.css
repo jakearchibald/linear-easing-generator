@@ -55,3 +55,22 @@
   display: grid;
   grid-template-rows: auto 1fr;
 }
+
+.preview-output {
+  display: grid;
+
+  @media (min-width: 1160px) {
+    display: grid;
+    gap: var(--ui-side-margin);
+
+    grid-template:
+      'todo' 1fr
+      'output' 1fr
+      / 1fr;
+  }
+  @media (min-width: 1820px) {
+    grid-template:
+      'todo output' 1fr
+      / 1fr 1fr;
+  }
+}
