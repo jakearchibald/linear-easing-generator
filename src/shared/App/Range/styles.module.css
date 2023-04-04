@@ -28,13 +28,17 @@
   inset: auto 0;
   top: 50%;
   transform: translateY(-50%);
-  width: calc(100% * var(--pos) + (var(--thumb-size) / 2));
+  width: calc(
+    (100% - var(--thumb-size)) * var(--pos) + (var(--thumb-size) / 2)
+  );
 }
 
 .inactive-line {
   background: var(--surface-0);
   margin-left: auto;
-  width: calc(100% - (100% * var(--pos)) - (var(--thumb-size) / 2));
+  width: calc(
+    (100% - var(--thumb-size)) * (1 - var(--pos)) + (var(--thumb-size) / 2)
+  );
 }
 
 .track {
