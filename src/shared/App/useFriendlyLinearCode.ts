@@ -1,20 +1,26 @@
-import { Signal, useComputed, useSignalEffect } from '@preact/signals';
+import { Signal, useComputed } from '@preact/signals';
+
+const lineLength = 80;
 
 export default function useFriendlyLinearCode(
   parts: Signal<string[]>,
+  name: Signal<string>,
 ): Signal<string> {
   return useComputed(() => {
     if (parts.value.length === 0) return '';
 
     let outputStart = ':root {\n';
-    let linearStart = '  --custom-easing: linear(';
+    let linearStart = `  --${name}-easing: linear(`;
     let linearEnd = ');';
     let outputEnd = '\n}';
     let lines = [];
     let line = '';
 
+    const lineIndentSize = 4;
+
     for (const part of parts.value) {
-      if (line.length + part.length > 74) {
+      // 1 for comma
+      if (line.length + part.length + lineIndentSize + 1 > lineLength) {
         lines.push(line + ',');
         line = '';
       }
@@ -26,7 +32,7 @@ export default function useFriendlyLinearCode(
 
     if (
       lines.length === 1 &&
-      linearStart.length + lines[0].length + linearEnd.length < 80
+      linearStart.length + lines[0].length + linearEnd.length < lineLength
     ) {
       return outputStart + linearStart + lines[0] + linearEnd + outputEnd;
     }

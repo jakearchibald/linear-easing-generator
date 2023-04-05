@@ -21,7 +21,7 @@ interface Props {}
 const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
   const { codeType, code, simplify, round, update } = useURLState();
 
-  const [fullPoints, codeError] = useFullPointGeneration(code, codeType);
+  const [fullPoints, codeError, name] = useFullPointGeneration(code, codeType);
   const optimizedPoints = useOptimizedPoints(fullPoints, simplify, round);
   const outputReady = useComputed(
     () => !!fullPoints.value && !!optimizedPoints.value,
@@ -31,7 +31,7 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
     codeType.value === CodeType.JS ? fullPoints.value : code.value,
   );
   const linear = useLinearSyntax(optimizedPoints, round);
-  const friendlyExample = useFriendlyLinearCode(linear);
+  const friendlyExample = useFriendlyLinearCode(linear, name);
 
   // Create slightly optimized version for the demos
   const slightlyOptimizedPoints = useOptimizedPoints(

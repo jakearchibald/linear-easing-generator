@@ -27,31 +27,37 @@ function processScriptData(script: string) {
 
   let easingFunc: EasingFunc | undefined;
 
-  // Ideally the function is called 'easing'.
-  if ('easing' in self && typeof self.easing === 'function') {
-    easingFunc = self.easing as EasingFunc;
-  } else {
-    // Buuuuut if there's just one new global, let's be nice and use it.
-    const newGlobals = new Set(Object.keys(self));
-    for (const key of oldGlobals) newGlobals.delete(key);
+  // Look for a new global
+  const newGlobals = new Set(Object.keys(self));
+  for (const key of oldGlobals) newGlobals.delete(key);
 
-    if (newGlobals.size === 1) {
-      const [key] = newGlobals;
-
-      // @ts-ignore
-      if (key in self && typeof self[key] === 'function') {
-        // @ts-ignore
-        easingFunc = self[key] as EasingFunc;
-      }
-    }
+  // Remove any non-functions
+  for (const key of newGlobals) {
+    // @ts-ignore
+    if (typeof self[key] !== 'function') newGlobals.delete(key);
   }
 
-  if (!easingFunc) throw Error('Cannot find `easing` function on global');
+  if (newGlobals.size > 1) {
+    throw Error(
+      'Too many global functions. Found: ' + [...newGlobals].join(', '),
+    );
+  }
 
-  return Array.from({ length: pointsLength }, (_, i) => {
-    const pos = i / (pointsLength - 1);
-    return [pos, Number(easingFunc!(pos))];
-  });
+  if (newGlobals.size === 0) {
+    throw Error('No global function found.');
+  }
+
+  const [key] = newGlobals;
+  // @ts-ignore
+  easingFunc = self[key] as EasingFunc;
+
+  return [
+    key.replace(/[A-Z]/g, (match) => '-' + match.toLowerCase()),
+    Array.from({ length: pointsLength }, (_, i) => {
+      const pos = i / (pointsLength - 1);
+      return [pos, Number(easingFunc!(pos))];
+    }),
+  ] as [name: string, points: LinearData];
 }
 
 function processSVGData(pathData: string) {
@@ -71,7 +77,7 @@ function processSVGData(pathData: string) {
     return [lastX, point.y];
   });
 
-  return points;
+  return ['custom', points];
 }
 
 let used = false;
@@ -94,11 +100,12 @@ onmessage = ({ data }) => {
     used = true;
 
     try {
-      const points =
+      const result =
         data.action === 'process-svg'
           ? processSVGData(script)
           : processScriptData(script);
-      port.postMessage({ result: points });
+
+      port.postMessage({ result });
     } catch (error) {
       const errorDetails: PostMessageError = {
         ...parseStack(error as Error),

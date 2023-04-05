@@ -12,9 +12,14 @@ const processingDebounce = 300;
 export default function useFullPointGeneration(
   code: Signal<string>,
   type: Signal<CodeType>,
-): [linearData: Signal<LinearData | null>, codeError: Signal<string>] {
+): [
+  linearData: Signal<LinearData | null>,
+  codeError: Signal<string>,
+  name: Signal<string>,
+] {
   const fullPoints = useSignal<LinearData | null>(null);
   const codeError = useSignal<string>('');
+  const name = useSignal<string>('');
   const currentProcessingControllerRef = useRef<AbortController | null>(null);
   const processingTimeoutRef = useRef<number>(0);
   const firstProcessRef = useRef(true);
@@ -31,16 +36,18 @@ export default function useFullPointGeneration(
       firstProcessRef.current = false;
       currentProcessingControllerRef.current = new AbortController();
       try {
-        const val = await processEasing(
+        const [newName, points] = await processEasing(
           currentProcessingControllerRef.current.signal,
           currentCode,
           type.value,
         );
-        fullPoints.value = val;
+        fullPoints.value = points;
         codeError.value = '';
+        name.value = newName;
       } catch (error) {
         if ((error as Error).name === 'AbortError') return;
         fullPoints.value = null;
+        name.value = '';
 
         if (error instanceof ProcessScriptEasingError) {
           let errorString = error.message;
@@ -72,5 +79,5 @@ export default function useFullPointGeneration(
     }
   });
 
-  return [fullPoints, codeError];
+  return [fullPoints, codeError, name];
 }
