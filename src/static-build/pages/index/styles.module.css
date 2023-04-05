@@ -68,13 +68,11 @@ body {
 
     grid-template:
       'input preview-output' 1fr
-      'input simplify' auto
       / 1fr 1fr;
   }
   @media (min-width: 1820px) {
     grid-template:
       'input preview-output preview-output' 1fr
-      'input simplify simplify' auto
       / 1fr 1fr 1fr;
   }
 }

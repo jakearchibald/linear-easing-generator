@@ -58,21 +58,21 @@
 }
 
 .preview-output {
-  display: grid;
-  overflow: hidden;
-
   @media (min-width: 1160px) {
     display: grid;
+    overflow: hidden;
     gap: var(--ui-side-margin);
 
     grid-template:
-      'todo' 1fr
-      'output' 1fr
+      'preview' 1fr
+      'output' minmax(295px, 33%)
+      'simplify' auto
       / 1fr;
   }
   @media (min-width: 1820px) {
     grid-template:
-      'todo output' 1fr
+      'preview output' 1fr
+      'simplify simplify' auto
       / 1fr 1fr;
   }
 }

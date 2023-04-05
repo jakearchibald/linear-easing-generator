@@ -55,6 +55,14 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
         />
       </div>
       <div class={styles.previewOutput} style={{ gridArea: 'preview-output' }}>
+        <div class={styles.appModule} style={{ gridArea: 'preview' }}>
+          <div class={styles.sectionHeader}>
+            <div class={styles.sectionHeaderTitle}>
+              <h2>Preview</h2>
+              <p>Here's how it looks:</p>
+            </div>
+          </div>
+        </div>
         <div class={styles.appModule} style={{ gridArea: 'output' }}>
           <div class={styles.sectionHeader}>
             <div class={styles.sectionHeaderTitle}>
@@ -68,18 +76,18 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
             readOnly
           />
         </div>
-      </div>
-      <div class={styles.appModule} style={{ gridArea: 'simplify' }}>
-        <Optim
-          onInput={(newSimplify, newRound) =>
-            update({
-              simplify: newSimplify,
-              round: newRound,
-            })
-          }
-          round={round}
-          simplify={simplify}
-        />
+        <div class={styles.appModule} style={{ gridArea: 'simplify' }}>
+          <Optim
+            onInput={(newSimplify, newRound) =>
+              update({
+                simplify: newSimplify,
+                round: newRound,
+              })
+            }
+            round={round}
+            simplify={simplify}
+          />
+        </div>
       </div>
       {/*
 
