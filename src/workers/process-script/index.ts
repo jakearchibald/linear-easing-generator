@@ -23,7 +23,10 @@ function processScriptData(script: string) {
   const oldGlobals = Object.keys(self);
 
   // Using importScripts rather than eval, as it gives better stack traces.
-  importScripts(`data:text/javascript,${encodeURIComponent(script)}`);
+  // But also wrapping in a function, so things aren't global by default.
+  importScripts(
+    `data:text/javascript,${encodeURIComponent(`(() => {${script};})()`)}`,
+  );
 
   let easingFunc: EasingFunc | undefined;
 

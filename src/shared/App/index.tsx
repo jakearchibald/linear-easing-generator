@@ -23,8 +23,8 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
 
   const [fullPoints, codeError, name] = useFullPointGeneration(code, codeType);
   const optimizedPoints = useOptimizedPoints(fullPoints, simplify, round);
-  const outputReady = useComputed(
-    () => !!fullPoints.value && !!optimizedPoints.value,
+  const outputReady = useComputed(() =>
+    Boolean(fullPoints.value && optimizedPoints.value),
   );
   // Just pass through the original SVG for the graph, if the input is SVG
   const graphFullPoints = useComputed(() =>
@@ -62,6 +62,10 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
               <p>Here's how it looks:</p>
             </div>
           </div>
+          <Graph
+            fullPoints={graphFullPoints}
+            optimizedPoints={optimizedPoints}
+          />
         </div>
         <div class={styles.appModule} style={{ gridArea: 'output' }}>
           <div class={styles.sectionHeader}>
@@ -92,9 +96,7 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
       {/*
 
       <DemoLinks onStateUpdate={(newState) => update(newSta
-      {outputReady.value && (
-        <Graph fullPoints={graphFullPoints} optimizedPoints={optimizedPoints} />
-      )}
+
 
       <CopyButton value={friendlyExample} />
       {outputReady.value && (

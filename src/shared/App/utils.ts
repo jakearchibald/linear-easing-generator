@@ -33,9 +33,11 @@ export function doAbortable<R>(
 
 export function logSignalUpdates(signals: { [name: string]: Signal<any> }) {
   useSignalEffect(() => {
-    for (const [name, signal] of Object.entries(signals)) {
-      console.log(name, signal.value);
-    }
+    console.log(
+      Object.fromEntries(
+        Object.entries(signals).map(([key, value]) => [key, value.value]),
+      ),
+    );
   });
 }
 
