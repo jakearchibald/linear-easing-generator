@@ -1,6 +1,5 @@
 .graph-component {
   background: var(--surface-3);
-  padding: 50px;
   overflow: hidden;
 }
 
@@ -16,7 +15,8 @@
 .full-path,
 .optimized-path {
   fill: none;
-  stroke-width: 0.005px;
+  stroke-width: 1px;
+  vector-effect: non-scaling-stroke;
 }
 
 .full-path {
@@ -28,6 +28,12 @@
 }
 
 .graph-axis {
+  fill: none;
+  stroke: var(--text-2);
+  stroke-width: 2px;
+}
+
+.graph-sublines {
   fill: none;
   stroke: var(--surface-4);
   stroke-width: 1px;
