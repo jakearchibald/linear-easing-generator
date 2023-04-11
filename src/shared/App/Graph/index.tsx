@@ -10,7 +10,7 @@ import {
 import { LinearData } from 'shared-types/index';
 import 'add-css:./styles.module.css';
 import * as styles from './styles.module.css';
-import { logSignalUpdates } from '../utils';
+import { logSignalUpdates, useElementSize } from '../utils';
 
 interface Props {
   fullPoints: Signal<LinearData | string | null>;
@@ -27,93 +27,15 @@ function useToPath(pointsSignal: Signal<LinearData | string | null>) {
   });
 }
 
-function useIdealSVGScale(
-  graphSVGRef: Ref<SVGSVGElement>,
-  points: Signal<LinearData | null>,
-): Signal<number> {
-  // Find out how far the values go out of bounds, where 0 is within bounds.
-  const valueBounds = useComputed(() => {
-    if (points.value === null) return [0, 0];
-    const result = [0, 0];
-
-    for (const point of points.value) {
-      for (const [i, value] of point.entries()) {
-        if (value >= 1) {
-          result[i] = Math.max(result[i], value - 1);
-        } else if (value <= 0) {
-          result[i] = Math.max(result[i], value * -1);
-        }
-      }
-    }
-
-    return result;
-  });
-
-  // Container size where 1 is the shortest side and the other side is >= 1
-  const containerSize: Signal<[number, number] | null> = useSignal(null);
-
-  useLayoutEffect(() => {
-    const observer = new ResizeObserver((entries) => {
-      const size = entries[0].contentBoxSize[0];
-
-      if (size.inlineSize > size.blockSize) {
-        containerSize.value = [size.inlineSize / size.blockSize, 1];
-      } else {
-        containerSize.value = [1, size.blockSize / size.inlineSize];
-      }
-    });
-
-    observer.observe(graphSVGRef.current!);
-
-    return () => observer.disconnect();
-  }, []);
-
-  const idealScale = useComputed(() => {
-    if (containerSize.value === null) return 1;
-
-    const fullGraphX = valueBounds.value[0] * 2 + 1;
-    const fullGraphY = valueBounds.value[1] * 2 + 1;
-
-    const xDiff = fullGraphX - containerSize.value[0];
-    const yDiff = fullGraphY - containerSize.value[1];
-
-    if (xDiff > yDiff) {
-      return Math.min(1, containerSize.value[0] / fullGraphX);
-    } else {
-      return Math.min(1, containerSize.value[1] / fullGraphY);
-    }
-  });
-
-  return idealScale;
-}
-
-const Graph: FunctionComponent<Props> = ({
-  fullPoints,
-  optimizedPoints,
-}: RenderableProps<Props>) => {
-  const fullPointsPath = useToPath(fullPoints);
-  const optimizedPath = useToPath(optimizedPoints);
-  const graphSVGRef = useRef<SVGSVGElement>(null);
-  const containerSize: Signal<[width: number, height: number] | null> =
-    useSignal(null);
-
-  useLayoutEffect(() => {
-    const observer = new ResizeObserver((entries) => {
-      const size = entries[0].contentBoxSize[0];
-      containerSize.value = [size.inlineSize, size.blockSize];
-    });
-
-    observer.observe(graphSVGRef.current!);
-
-    return () => observer.disconnect();
-  }, []);
+function useCanvasBounds(points: Signal<LinearData | null>) {
+  const [graphSVGRef, containerSize] = useElementSize();
 
   const valueBounds = useComputed(() => {
     const bounds = { x1: 0, y1: 0, x2: 1, y2: 1 };
 
-    if (optimizedPoints.value === null) return bounds;
+    if (points.value === null) return bounds;
 
-    for (const point of optimizedPoints.value) {
+    for (const point of points.value) {
       if (point[0] < bounds.x1) {
         bounds.x1 = point[0];
       } else if (point[0] > bounds.x2) {
@@ -136,8 +58,8 @@ const Graph: FunctionComponent<Props> = ({
     const padding = 60;
     if (!containerSize.value) return { scale: 1, x1: 0, x2: 1, y1: 0, y2: 1 };
 
-    const canvasUsableWidth = containerSize.value[0] - padding * 2;
-    const canvasUsableHeight = containerSize.value[1] - padding * 2;
+    const canvasUsableWidth = containerSize.value.width - padding * 2;
+    const canvasUsableHeight = containerSize.value.height - padding * 2;
     const boundsWidth = valueBounds.value.x2 - valueBounds.value.x1;
     const boundsHeight = valueBounds.value.y2 - valueBounds.value.y1;
 
@@ -149,8 +71,8 @@ const Graph: FunctionComponent<Props> = ({
       scale = canvasUsableWidth / boundsWidth;
     }
 
-    const canvasWidthToScale = containerSize.value[0] / scale;
-    const canvasHeightToScale = containerSize.value[1] / scale;
+    const canvasWidthToScale = containerSize.value.width / scale;
+    const canvasHeightToScale = containerSize.value.height / scale;
     const x1 = valueBounds.value.x1 - (canvasWidthToScale - boundsWidth) / 2;
     const x2 = x1 + canvasWidthToScale;
     const y1 = valueBounds.value.y1 - (canvasHeightToScale - boundsHeight) / 2;
@@ -158,6 +80,17 @@ const Graph: FunctionComponent<Props> = ({
 
     return { scale, x1, x2, y1, y2 };
   });
+
+  return [graphSVGRef, canvasBounds] as const;
+}
+
+const Graph: FunctionComponent<Props> = ({
+  fullPoints,
+  optimizedPoints,
+}: RenderableProps<Props>) => {
+  const fullPointsPath = useToPath(fullPoints);
+  const optimizedPath = useToPath(optimizedPoints);
+  const [graphSVGRef, canvasBounds] = useCanvasBounds(optimizedPoints);
 
   const canvasScale = useComputed(() => canvasBounds.value.scale);
 

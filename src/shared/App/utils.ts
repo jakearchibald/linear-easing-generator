@@ -1,5 +1,11 @@
-import { Signal, useComputed, useSignalEffect } from '@preact/signals';
+import {
+  Signal,
+  useComputed,
+  useSignal,
+  useSignalEffect,
+} from '@preact/signals';
 import { CodeType, State } from './types';
+import { useCallback } from 'preact/hooks';
 
 export function doAbortable<R>(
   signal: AbortSignal,
@@ -59,4 +65,30 @@ export function getURLParamsFromState(state: Partial<State>) {
   if (state.round !== undefined) params.set('round', state.round.toString());
 
   return params;
+}
+
+export function useElementSize(): [
+  refCallback: (el: Element | null) => void,
+  sizeSignal: Signal<{ width: number; height: number } | null>,
+] {
+  const elSignal = useSignal<Element | null>(null);
+  const sizeSignal = useSignal<{ width: number; height: number } | null>(null);
+  const refCallback = useCallback((el: Element | null) => {
+    elSignal.value = el;
+  }, []);
+
+  useSignalEffect(() => {
+    if (!elSignal.value) return;
+
+    const observer = new ResizeObserver((entries) => {
+      const size = entries[0].contentBoxSize[0];
+      sizeSignal.value = { width: size.inlineSize, height: size.blockSize };
+    });
+
+    observer.observe(elSignal.value!);
+
+    return () => observer.disconnect();
+  });
+
+  return [refCallback, sizeSignal];
 }
