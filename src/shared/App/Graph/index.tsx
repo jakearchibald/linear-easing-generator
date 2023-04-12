@@ -1,12 +1,5 @@
-import { Signal, useComputed, useSignal } from '@preact/signals';
+import { Signal, useComputed } from '@preact/signals';
 import { h, Fragment, RenderableProps, FunctionComponent } from 'preact';
-import {
-  useRef,
-  useLayoutEffect,
-  useCallback,
-  useEffect,
-  Ref,
-} from 'preact/hooks';
 import { LinearData } from 'shared-types/index';
 import 'add-css:./styles.module.css';
 import * as styles from './styles.module.css';
@@ -55,10 +48,14 @@ function useCanvasBounds(points: Signal<LinearData | null>) {
   });
 
   const canvasBounds = useComputed(() => {
-    const padding = 60;
+    const padding = 30;
+    const paddingRight = 250;
+
     if (!containerSize.value) return { scale: 1, x1: 0, x2: 1, y1: 0, y2: 1 };
 
-    const canvasUsableWidth = containerSize.value.width - padding * 2;
+    const canvasUsableWidth =
+      containerSize.value.width - (padding + paddingRight);
+
     const canvasUsableHeight = containerSize.value.height - padding * 2;
     const boundsWidth = valueBounds.value.x2 - valueBounds.value.x1;
     const boundsHeight = valueBounds.value.y2 - valueBounds.value.y1;
@@ -73,7 +70,7 @@ function useCanvasBounds(points: Signal<LinearData | null>) {
 
     const canvasWidthToScale = containerSize.value.width / scale;
     const canvasHeightToScale = containerSize.value.height / scale;
-    const x1 = valueBounds.value.x1 - (canvasWidthToScale - boundsWidth) / 2;
+    const x1 = valueBounds.value.x1 - padding / scale;
     const x2 = x1 + canvasWidthToScale;
     const y1 = valueBounds.value.y1 - (canvasHeightToScale - boundsHeight) / 2;
     const y2 = y1 + canvasHeightToScale;

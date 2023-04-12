@@ -76,3 +76,33 @@
       / 1fr 1fr;
   }
 }
+
+.preview-content {
+  display: grid;
+  overflow: hidden;
+  position: relative;
+}
+
+.animated-demos {
+  position: absolute;
+  inset: var(--content-side-padding);
+  left: auto;
+  width: 190px;
+  display: grid;
+}
+
+.preview-section-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+
+.input {
+  border: 1px solid var(--surface-0);
+  border-radius: 4px;
+  padding: 0.2rem 0.8rem 0.2rem;
+  font: inherit;
+}
+
+.duration-input {
+  width: 60px;
+}

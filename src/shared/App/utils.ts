@@ -85,8 +85,7 @@ export function useElementSize(): [
       sizeSignal.value = { width: size.inlineSize, height: size.blockSize };
     });
 
-    observer.observe(elSignal.value!);
-
+    observer.observe(elSignal.value);
     return () => observer.disconnect();
   });
 

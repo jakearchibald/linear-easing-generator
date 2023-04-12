@@ -1,7 +1,7 @@
 import { ReadonlySignal, useSignal, batch } from '@preact/signals';
 import { useCallback, useMemo, useRef } from 'preact/hooks';
 import { CodeType, State } from './types';
-import { bounce, materialEmphasized, spring } from './demos';
+import { bounce, materialEmphasized, spring, elastic } from './demos';
 import { getURLParamsFromState } from './utils';
 
 interface UseURLStateReturn {

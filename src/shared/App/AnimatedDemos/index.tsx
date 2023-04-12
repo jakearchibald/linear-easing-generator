@@ -12,6 +12,7 @@ import { useEffect, useRef } from 'preact/hooks';
 interface Props {
   linear: Signal<string[]>;
   slightlyOptimizedLinear: Signal<string[]>;
+  duration: Signal<number>;
 }
 
 const gap = 500;
@@ -21,7 +22,12 @@ const anim = (
   easing: string,
   duration: number,
   keyframes: Keyframe[] | PropertyIndexedKeyframes,
-) => el.animate(keyframes, { fill: 'forwards', duration, easing }).finished;
+) =>
+  el.animate(keyframes, {
+    fill: 'forwards',
+    duration,
+    easing: easing || 'linear',
+  }).finished;
 
 const useLinearValue = (linear: Signal<string[]>) =>
   useComputed(() =>
@@ -31,9 +37,8 @@ const useLinearValue = (linear: Signal<string[]>) =>
 const Demos: FunctionComponent<Props> = ({
   slightlyOptimizedLinear,
   linear,
+  duration,
 }: RenderableProps<Props>) => {
-  const durationInputValue = useSignal('2000');
-  const duration = useComputed(() => Number(durationInputValue.value) || 2000);
   const slightlyOptimizedLinearStr = useLinearValue(slightlyOptimizedLinear);
   const linearStr = useLinearValue(linear);
   const demos = useRef<HTMLDivElement>(null);
@@ -52,11 +57,11 @@ const Demos: FunctionComponent<Props> = ({
             slightlyOptimizedLinearStr.value,
             duration.value,
             {
-              transform: ['translateX(0)', 'translateX(100%)'],
+              transform: ['translateY(0)', 'translateY(100%)'],
             },
           ),
           anim(translateEl.current!, linearStr.value, duration.value, {
-            transform: ['translateX(0)', 'translateX(100%)'],
+            transform: ['translateY(0)', 'translateY(100%)'],
           }),
         ]);
 
@@ -70,11 +75,11 @@ const Demos: FunctionComponent<Props> = ({
             slightlyOptimizedLinearStr.value,
             duration.value,
             {
-              transform: ['translateX(100%)', 'translateX(0)'],
+              transform: ['translateY(100%)', 'translateY(0)'],
             },
           ),
           anim(translateEl.current!, linearStr.value, duration.value, {
-            transform: ['translateX(100%)', 'translateX(0)'],
+            transform: ['translateY(100%)', 'translateY(0)'],
           }),
         ]);
 
@@ -123,30 +128,13 @@ const Demos: FunctionComponent<Props> = ({
   });
 
   return (
-    <div style={{ display: 'none' }}>
-      <p>
-        <label>
-          Duration:{' '}
-          <input
-            type="number"
-            value={durationInputValue}
-            onInput={(event) =>
-              (durationInputValue.value = (
-                event.target as HTMLInputElement
-              ).value)
-            }
-          />
-          ms
-        </label>
-      </p>
-      <div ref={demos} class={styles.demos}>
-        <div class={styles.translate}>
-          <div ref={slightlyOptimizedTranslateEl}>
-            <div class={styles.demoBox}>Original</div>
-          </div>
-          <div ref={translateEl}>
-            <div class={styles.demoBox}>Optimized</div>
-          </div>
+    <div ref={demos} class={styles.demos}>
+      <div class={styles.translate}>
+        <div ref={slightlyOptimizedTranslateEl}>
+          <div class={styles.demoBox}></div>
+        </div>
+        <div ref={translateEl}>
+          <div class={styles.demoBox}></div>
         </div>
       </div>
     </div>

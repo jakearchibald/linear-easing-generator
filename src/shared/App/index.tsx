@@ -21,11 +21,14 @@ interface Props {}
 const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
   const { codeType, code, simplify, round, update } = useURLState();
 
+  const durationInputValue = useSignal('1.5');
+  const duration = useComputed(
+    () => (Number(durationInputValue.value) || 1.5) * 1000,
+  );
+
   const [fullPoints, codeError, name] = useFullPointGeneration(code, codeType);
   const optimizedPoints = useOptimizedPoints(fullPoints, simplify, round);
-  const outputReady = useComputed(() =>
-    Boolean(fullPoints.value && optimizedPoints.value),
-  );
+
   // Just pass through the original SVG for the graph, if the input is SVG
   const graphFullPoints = useComputed(() =>
     codeType.value === CodeType.JS ? fullPoints.value : code.value,
@@ -56,16 +59,42 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
       </div>
       <div class={styles.previewOutput} style={{ gridArea: 'preview-output' }}>
         <div class={styles.appModule} style={{ gridArea: 'preview' }}>
-          <div class={styles.sectionHeader}>
+          <div
+            class={[styles.sectionHeader, styles.previewSectionHeader].join(
+              ' ',
+            )}
+          >
             <div class={styles.sectionHeaderTitle}>
               <h2>Preview</h2>
               <p>Here's how it looks:</p>
             </div>
+            <label class={styles.selectLabel}>
+              <span class={styles.labelTextEnd}>Duration</span>
+              <input
+                class={[styles.input, styles.durationInput].join(' ')}
+                type="number"
+                value={durationInputValue}
+                onInput={(event) =>
+                  (durationInputValue.value = (
+                    event.target as HTMLInputElement
+                  ).value)
+                }
+              />
+            </label>
           </div>
-          <Graph
-            fullPoints={graphFullPoints}
-            optimizedPoints={optimizedPoints}
-          />
+          <div class={styles.previewContent}>
+            <Graph
+              fullPoints={graphFullPoints}
+              optimizedPoints={optimizedPoints}
+            />
+            <div class={styles.animatedDemos}>
+              <AnimatedDemos
+                duration={duration}
+                linear={linear}
+                slightlyOptimizedLinear={slightlyOptimizedLinear}
+              />
+            </div>
+          </div>
         </div>
         <div class={styles.appModule} style={{ gridArea: 'output' }}>
           <div class={styles.sectionHeader}>
@@ -99,12 +128,6 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
 
 
       <CopyButton value={friendlyExample} />
-      {outputReady.value && (
-        <AnimatedDemos
-          linear={linear}
-          slightlyOptimizedLinear={slightlyOptimizedLinear}
-        />
-      )}
       */}
     </>
   );

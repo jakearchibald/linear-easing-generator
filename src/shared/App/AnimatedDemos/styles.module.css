@@ -1,28 +1,29 @@
 .demos {
-  --demo-box-size: 100px;
-  --demo-duration: 2s;
+  --demo-box-size: 65px;
   overflow: hidden;
+  background: var(--surface-1);
+  display: grid;
+  align-items: center;
 }
 
 .demo-box {
   width: var(--demo-box-size);
   height: var(--demo-box-size);
   background-color: green;
-  color: white;
+  border-radius: 1000px;
   display: grid;
   align-content: center;
   justify-content: center;
 }
 
 .translate {
-  width: 50%;
-  background: #333;
-  margin: 0 auto;
+  height: 75%;
   display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 20px;
-  padding: 20px 0;
+  padding: 0 20px;
 }
 
 .translate > div {
-  margin-right: var(--demo-box-size);
+  margin-bottom: var(--demo-box-size);
 }
