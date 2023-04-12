@@ -48,8 +48,10 @@ html {
 
 html,
 body {
-  height: 100svh;
-  overflow: clip;
+  @media (min-width: 1160px) {
+    height: 100svh;
+    overflow: clip;
+  }
 }
 
 body {

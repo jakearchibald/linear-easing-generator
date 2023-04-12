@@ -81,6 +81,11 @@
   display: grid;
   overflow: hidden;
   position: relative;
+  height: 50svh;
+
+  @media (min-width: 1160px) {
+    height: auto;
+  }
 }
 
 .animated-demos {
