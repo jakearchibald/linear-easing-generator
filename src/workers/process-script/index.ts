@@ -3,6 +3,7 @@ import {
   PostMessageError,
   LinearData,
   ProcessSVGData,
+  ProcessResult,
 } from 'shared-types/index';
 import parseStack from './error-stack-parser';
 import { svgPathProperties as SVGPathProperties } from 'svg-path-properties';
@@ -19,7 +20,7 @@ type EasingFunc = (value: number) => unknown;
 
 const pointsLength = 10_000;
 
-function processScriptData(script: string) {
+function processScriptData(script: string): ProcessResult {
   const oldGlobals = Object.keys(self);
 
   // Using importScripts rather than eval, as it gives better stack traces.
@@ -54,16 +55,20 @@ function processScriptData(script: string) {
   // @ts-ignore
   easingFunc = self[key] as EasingFunc;
 
-  return [
-    key.replace(/[A-Z]/g, (match) => '-' + match.toLowerCase()),
-    Array.from({ length: pointsLength }, (_, i) => {
+  return {
+    name: key.replace(/[A-Z]/g, (match) => '-' + match.toLowerCase()),
+    points: Array.from({ length: pointsLength }, (_, i) => {
       const pos = i / (pointsLength - 1);
       return [pos, Number(easingFunc!(pos))];
     }),
-  ] as [name: string, points: LinearData];
+    duration:
+      'duration' in self && typeof self.duration === 'number'
+        ? self.duration || 0
+        : 0,
+  };
 }
 
-function processSVGData(pathData: string) {
+function processSVGData(pathData: string): ProcessResult {
   const parsedPath = new SVGPathProperties(pathData);
   const totalLength = parsedPath.getTotalLength();
 
@@ -80,7 +85,11 @@ function processSVGData(pathData: string) {
     return [lastX, point.y];
   });
 
-  return ['custom', points];
+  return {
+    name: 'custom',
+    points,
+    duration: 0,
+  };
 }
 
 let used = false;

@@ -34,6 +34,7 @@ const springCode = `const [duration, func] = createSpring({
 });
 
 self.spring = func;
+self.duration = duration;
 
 function createSpring({ mass, stiffness, damping, velocity }) {
   const w0 = Math.sqrt(stiffness / mass);

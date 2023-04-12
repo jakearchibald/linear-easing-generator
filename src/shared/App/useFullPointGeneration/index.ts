@@ -1,5 +1,5 @@
 import { Signal, useSignal, useSignalEffect } from '@preact/signals';
-import { useRef } from 'preact/hooks';
+import { useEffect, useRef } from 'preact/hooks';
 import { LinearData } from 'shared-types/index';
 import { CodeType } from '../types';
 import {
@@ -12,6 +12,7 @@ const processingDebounce = 300;
 export default function useFullPointGeneration(
   code: Signal<string>,
   type: Signal<CodeType>,
+  onDurationChange: (duration: number) => void,
 ): [
   linearData: Signal<LinearData | null>,
   codeError: Signal<string>,
@@ -24,6 +25,11 @@ export default function useFullPointGeneration(
   const processingTimeoutRef = useRef<number>(0);
   const firstProcessRef = useRef(true);
   const lastCodeTypeRef = useRef<CodeType | null>(null);
+  const onDurationChangeRef = useRef<typeof onDurationChange | null>(null);
+
+  useEffect(() => {
+    onDurationChangeRef.current = onDurationChange;
+  }, [onDurationChange]);
 
   useSignalEffect(() => {
     const lastCodeType = lastCodeTypeRef.current;
@@ -36,14 +42,18 @@ export default function useFullPointGeneration(
       firstProcessRef.current = false;
       currentProcessingControllerRef.current = new AbortController();
       try {
-        const [newName, points] = await processEasing(
+        const result = await processEasing(
           currentProcessingControllerRef.current.signal,
           currentCode,
           type.value,
         );
-        fullPoints.value = points;
+        fullPoints.value = result.points;
         codeError.value = '';
-        name.value = newName;
+        name.value = result.name;
+
+        if (result.duration) {
+          onDurationChangeRef.current?.(result.duration);
+        }
       } catch (error) {
         if ((error as Error).name === 'AbortError') return;
         fullPoints.value = null;

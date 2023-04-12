@@ -10,6 +10,12 @@ export interface ProcessSVGData {
   port: MessagePort;
 }
 
+export interface ProcessResult {
+  name: string;
+  points: LinearData;
+  duration: number;
+}
+
 export type LinearData = [pos: number, val: number][];
 
 export interface BasicStackDetails {

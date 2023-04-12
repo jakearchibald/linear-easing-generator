@@ -50,7 +50,7 @@ export default function useURLState(): UseURLStateReturn {
       (defaultCodeType === CodeType.JS ? spring.code : materialEmphasized.code),
   );
 
-  const simplify = useSignal(originalURLState.simplify ?? 0.002);
+  const simplify = useSignal(originalURLState.simplify ?? 0.0017);
   const round = useSignal(originalURLState.round ?? 3);
 
   const urlChangeTimeout = useRef<number | null>(null);

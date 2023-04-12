@@ -26,7 +26,12 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
     () => (Number(durationInputValue.value) || 1.5) * 1000,
   );
 
-  const [fullPoints, codeError, name] = useFullPointGeneration(code, codeType);
+  const [fullPoints, codeError, name] = useFullPointGeneration(
+    code,
+    codeType,
+    (newDuration) =>
+      (durationInputValue.value = (newDuration / 1000).toFixed(3)),
+  );
   const optimizedPoints = useOptimizedPoints(fullPoints, simplify, round);
 
   // Just pass through the original SVG for the graph, if the input is SVG

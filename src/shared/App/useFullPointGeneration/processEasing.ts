@@ -1,6 +1,10 @@
 import * as styles from '../styles.module.css';
 import { doAbortable } from '../utils';
-import type { LinearData, PostMessageError } from 'shared-types/index';
+import type {
+  LinearData,
+  PostMessageError,
+  ProcessResult,
+} from 'shared-types/index';
 import { CodeType } from '../types';
 
 const [iframe, loaded] = (() => {
@@ -41,7 +45,7 @@ export default function processEasing(
   signal: AbortSignal,
   script: string,
   type: CodeType,
-): Promise<[name: string, points: LinearData]> {
+): Promise<ProcessResult> {
   return (queue = queue
     .catch(() => {})
     .then(() =>
@@ -68,18 +72,16 @@ export default function processEasing(
 
         setAbortAction(done);
 
-        const resultPromise = new Promise<[name: string, points: LinearData]>(
-          (resolve, reject) => {
-            port1.onmessage = ({ data }) => {
-              if (data.error) reject(new ProcessScriptEasingError(data.error));
-              else {
-                resolve(data.result);
-              }
+        const resultPromise = new Promise<ProcessResult>((resolve, reject) => {
+          port1.onmessage = ({ data }) => {
+            if (data.error) reject(new ProcessScriptEasingError(data.error));
+            else {
+              resolve(data.result);
+            }
 
-              done();
-            };
-          },
-        );
+            done();
+          };
+        });
 
         iframe!.contentWindow!.postMessage(
           {
@@ -93,5 +95,5 @@ export default function processEasing(
 
         return resultPromise;
       }),
-    )) as Promise<[name: string, points: LinearData]>;
+    )) as Promise<ProcessResult>;
 }
