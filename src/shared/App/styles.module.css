@@ -113,10 +113,12 @@
 }
 
 .input {
+  background: none;
   border: 1px solid var(--surface-0);
   border-radius: 4px;
   padding: 0.2rem 0.8rem 0.2rem;
   font: inherit;
+  color: inherit;
 }
 
 .duration-input {
