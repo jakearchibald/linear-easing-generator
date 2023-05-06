@@ -1,9 +1,9 @@
 import { Signal, useComputed } from '@preact/signals';
-import { h, Fragment, RenderableProps, FunctionComponent } from 'preact';
+import { h, RenderableProps, FunctionComponent } from 'preact';
 import { LinearData } from 'shared-types/index';
 import 'add-css:./styles.module.css';
 import * as styles from './styles.module.css';
-import { logSignalUpdates, useElementSize } from '../utils';
+import { useElementSize, useMatchMedia } from '../utils';
 
 interface Props {
   fullPoints: Signal<LinearData | string | null>;
@@ -47,16 +47,22 @@ function useCanvasBounds(points: Signal<LinearData | null>) {
     return bounds;
   });
 
+  const ultraWide = useMatchMedia('(min-width: 1820px)');
+
   const canvasBounds = useComputed(() => {
     const padding = 30;
-    const paddingRight = 250;
+    const extraPadding = 250;
+    const paddingRight = ultraWide.value ? padding : extraPadding;
+    const paddingBottom = ultraWide.value ? extraPadding : padding;
 
     if (!containerSize.value) return { scale: 1, x1: 0, x2: 1, y1: 0, y2: 1 };
 
     const canvasUsableWidth =
       containerSize.value.width - (padding + paddingRight);
 
-    const canvasUsableHeight = containerSize.value.height - padding * 2;
+    const canvasUsableHeight =
+      containerSize.value.height - (padding + paddingBottom);
+
     const boundsWidth = valueBounds.value.x2 - valueBounds.value.x1;
     const boundsHeight = valueBounds.value.y2 - valueBounds.value.y1;
 
@@ -72,7 +78,7 @@ function useCanvasBounds(points: Signal<LinearData | null>) {
     const canvasHeightToScale = containerSize.value.height / scale;
     const x1 = valueBounds.value.x1 - padding / scale;
     const x2 = x1 + canvasWidthToScale;
-    const y1 = valueBounds.value.y1 - (canvasHeightToScale - boundsHeight) / 2;
+    const y1 = valueBounds.value.y1 - padding / scale;
     const y2 = y1 + canvasHeightToScale;
 
     return { scale, x1, x2, y1, y2 };
@@ -113,18 +119,22 @@ const Graph: FunctionComponent<Props> = ({
 
     const { scale, x1, x2, y1, y2 } = canvasBounds.value;
 
+    // Negative horizontal lines
     for (let x = 0; x > x1; x -= 0.25) {
       line += `M ${x * scale} ${y1 * scale} V ${y2 * scale}`;
     }
 
+    // Positive horizontal lines
     for (let x = 0; x < x2; x += 0.25) {
       line += `M ${x * scale} ${y1 * scale} V ${y2 * scale}`;
     }
 
+    // Negative vertical lines
     for (let y = 0; y > y1; y -= 0.25) {
       line += `M ${x1 * scale} ${y * scale} H ${x2 * scale}`;
     }
 
+    // Positive vertical lines
     for (let y = 0; y < y2; y += 0.25) {
       line += `M ${x1 * scale} ${y * scale} H ${x2 * scale}`;
     }

@@ -89,11 +89,19 @@
 }
 
 .animated-demos {
+  --size: 190px;
   position: absolute;
   inset: var(--content-side-padding);
   left: auto;
-  width: 190px;
+  width: var(--size);
   display: grid;
+
+  @media (min-width: 1820px) {
+    width: auto;
+    height: var(--size);
+    inset: var(--content-side-padding);
+    top: auto;
+  }
 }
 
 .preview-section-header {

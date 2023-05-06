@@ -8,6 +8,7 @@ import { h, Fragment, RenderableProps, FunctionComponent } from 'preact';
 import 'add-css:./styles.module.css';
 import * as styles from './styles.module.css';
 import { useEffect, useRef } from 'preact/hooks';
+import { useMatchMedia } from '../utils';
 
 interface Props {
   linear: Signal<string[]>;
@@ -27,7 +28,7 @@ const anim = (
     fill: 'forwards',
     duration,
     easing: easing || 'linear',
-  }).finished;
+  });
 
 const useLinearValue = (linear: Signal<string[]>) =>
   useComputed(() =>
@@ -49,45 +50,84 @@ const Demos: FunctionComponent<Props> = ({
   useEffect(() => {
     let stop = false;
 
+    // Watch for the media change, as the animation direction changes
+    const media = matchMedia('(min-width: 1820px)');
+    let currentMediaListener: (() => void) | null = null;
+    const mediaListener = () => currentMediaListener?.();
+    media.addEventListener('change', mediaListener);
+
+    const getAxis = () => (media.matches ? 'X' : 'Y');
+    const getOutKeyframes = () => [
+      `translate${getAxis()}(0)`,
+      `translate${getAxis()}(100%)`,
+    ];
+    const getInKeyframes = () => [
+      `translate${getAxis()}(100%)`,
+      `translate${getAxis()}(0)`,
+    ];
+
     (async () => {
       while (!stop) {
-        await Promise.all([
+        const outAnims = [
           anim(
             slightlyOptimizedTranslateEl.current!,
             slightlyOptimizedLinearStr.value,
             duration.value,
             {
-              transform: ['translateY(0)', 'translateY(100%)'],
+              transform: getOutKeyframes(),
             },
           ),
           anim(translateEl.current!, linearStr.value, duration.value, {
-            transform: ['translateY(0)', 'translateY(100%)'],
+            transform: getOutKeyframes(),
           }),
-        ]);
+        ];
 
+        // Switch the keyframes if the media query changes
+        currentMediaListener = () => {
+          for (const anim of outAnims) {
+            (anim.effect as KeyframeEffect).setKeyframes({
+              transform: getOutKeyframes(),
+            });
+          }
+        };
+
+        await Promise.all(outAnims.map((a) => a.finished));
         await document.body.animate(null, gap).finished;
 
         if (stop) break;
 
-        await Promise.all([
+        const inAnims = [
           anim(
             slightlyOptimizedTranslateEl.current!,
             slightlyOptimizedLinearStr.value,
             duration.value,
             {
-              transform: ['translateY(100%)', 'translateY(0)'],
+              transform: getInKeyframes(),
             },
           ),
           anim(translateEl.current!, linearStr.value, duration.value, {
-            transform: ['translateY(100%)', 'translateY(0)'],
+            transform: getInKeyframes(),
           }),
-        ]);
+        ];
 
+        // Switch the keyframes if the media query changes
+        currentMediaListener = () => {
+          for (const anim of outAnims) {
+            (anim.effect as KeyframeEffect).setKeyframes({
+              transform: getInKeyframes(),
+            });
+          }
+        };
+
+        await Promise.all(inAnims.map((a) => a.finished));
         await document.body.animate(null, gap).finished;
       }
     })();
 
-    return () => (stop = true);
+    return () => {
+      stop = true;
+      media.removeEventListener('change', mediaListener);
+    };
   }, []);
 
   // Updates to easing

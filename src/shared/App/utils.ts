@@ -5,7 +5,7 @@ import {
   useSignalEffect,
 } from '@preact/signals';
 import { CodeType, State } from './types';
-import { useCallback } from 'preact/hooks';
+import { useCallback, useEffect, useLayoutEffect } from 'preact/hooks';
 
 export function doAbortable<R>(
   signal: AbortSignal,
@@ -90,4 +90,20 @@ export function useElementSize(): [
   });
 
   return [refCallback, sizeSignal];
+}
+
+export function useMatchMedia(query: string): Signal<boolean> {
+  const matchSignal = useSignal<boolean>(false);
+
+  useLayoutEffect(() => {
+    const queryMatch = matchMedia(query);
+    const listener = () => (matchSignal.value = queryMatch.matches);
+
+    queryMatch.addEventListener('change', listener);
+    listener();
+
+    return () => queryMatch.removeEventListener('change', listener);
+  }, []);
+
+  return matchSignal;
 }
