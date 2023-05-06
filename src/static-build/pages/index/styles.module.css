@@ -11,6 +11,8 @@
 
   --blue-1: #009dff;
 
+  --red-1: #c50000;
+
   --text-1: var(--gray-12);
   --text-2: var(--gray-10);
   --surface-0: var(--gray-3);
@@ -20,6 +22,7 @@
   --surface-4: var(--gray-5);
 
   --accent: var(--blue-1);
+  --accent-2: var(--red-1);
 
   --ui-side-margin: 10px;
   --content-side-padding: 30px;

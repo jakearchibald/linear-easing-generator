@@ -9,11 +9,16 @@
 .demo-box {
   width: var(--demo-box-size);
   height: var(--demo-box-size);
-  background-color: green;
+  background-color: var(--text-2);
   border-radius: 1000px;
   display: grid;
   align-content: center;
   justify-content: center;
+  color: var(--surface-1);
+}
+
+.unoptimized-demo-box {
+  background-color: var(--accent-2);
 }
 
 .translate {

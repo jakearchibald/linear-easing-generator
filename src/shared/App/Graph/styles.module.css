@@ -20,7 +20,7 @@
 }
 
 .full-path {
-  stroke: red;
+  stroke: var(--accent-2);
 }
 
 .optimized-path {

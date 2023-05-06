@@ -131,10 +131,12 @@ const Demos: FunctionComponent<Props> = ({
     <div ref={demos} class={styles.demos}>
       <div class={styles.translate}>
         <div ref={slightlyOptimizedTranslateEl}>
-          <div class={styles.demoBox}></div>
+          <div class={[styles.demoBox, styles.unoptimizedDemoBox].join(' ')}>
+            Input
+          </div>
         </div>
         <div ref={translateEl}>
-          <div class={styles.demoBox}></div>
+          <div class={styles.demoBox}>Output</div>
         </div>
       </div>
     </div>
