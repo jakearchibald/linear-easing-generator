@@ -1,6 +1,6 @@
 TODOs:
 
-- Mobile view
+- Sticky mobile view
 - Style error message
 - Play/pause button
 - Prefers reduced motion (auto-pause)
@@ -24,3 +24,4 @@ Done:
 - Optimize loading (switch to esm, external JS)
 - Style two demos, and make it clear which is which
 - Wider view
+- Mobile view
