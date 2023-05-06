@@ -47,13 +47,15 @@ function useCanvasBounds(points: Signal<LinearData | null>) {
     return bounds;
   });
 
-  const ultraWide = useMatchMedia('(min-width: 1820px)');
+  const horizontalDemos = useMatchMedia(
+    '(min-width: 1820px), (max-width: 1159px)',
+  );
 
   const canvasBounds = useComputed(() => {
     const padding = 30;
     const extraPadding = 250;
-    const paddingRight = ultraWide.value ? padding : extraPadding;
-    const paddingBottom = ultraWide.value ? extraPadding : padding;
+    const paddingRight = horizontalDemos.value ? padding : extraPadding;
+    const paddingBottom = horizontalDemos.value ? extraPadding : padding;
 
     if (!containerSize.value) return { scale: 1, x1: 0, x2: 1, y1: 0, y2: 1 };
 
@@ -76,9 +78,21 @@ function useCanvasBounds(points: Signal<LinearData | null>) {
 
     const canvasWidthToScale = containerSize.value.width / scale;
     const canvasHeightToScale = containerSize.value.height / scale;
-    const x1 = valueBounds.value.x1 - padding / scale;
+
+    const x1 =
+      valueBounds.value.x1 -
+      (horizontalDemos.value
+        ? (canvasWidthToScale - boundsWidth) / 2
+        : padding / scale);
+
     const x2 = x1 + canvasWidthToScale;
-    const y1 = valueBounds.value.y1 - padding / scale;
+
+    const y1 =
+      valueBounds.value.y1 -
+      (horizontalDemos.value
+        ? padding / scale
+        : (canvasHeightToScale - boundsHeight) / 2);
+
     const y2 = y1 + canvasHeightToScale;
 
     return { scale, x1, x2, y1, y2 };

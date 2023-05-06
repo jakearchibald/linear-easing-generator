@@ -51,12 +51,14 @@ const Demos: FunctionComponent<Props> = ({
     let stop = false;
 
     // Watch for the media change, as the animation direction changes
-    const media = matchMedia('(min-width: 1820px)');
+    const horizonalAnimMedia = matchMedia(
+      '(min-width: 1820px), (max-width: 1159px)',
+    );
     let currentMediaListener: (() => void) | null = null;
     const mediaListener = () => currentMediaListener?.();
-    media.addEventListener('change', mediaListener);
+    horizonalAnimMedia.addEventListener('change', mediaListener);
 
-    const getAxis = () => (media.matches ? 'X' : 'Y');
+    const getAxis = () => (horizonalAnimMedia.matches ? 'X' : 'Y');
     const getOutKeyframes = () => [
       `translate${getAxis()}(0)`,
       `translate${getAxis()}(100%)`,
@@ -126,7 +128,7 @@ const Demos: FunctionComponent<Props> = ({
 
     return () => {
       stop = true;
-      media.removeEventListener('change', mediaListener);
+      horizonalAnimMedia.removeEventListener('change', mediaListener);
     };
   }, []);
 

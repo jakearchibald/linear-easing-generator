@@ -28,7 +28,7 @@
   gap: 20px;
   padding: 0 20px;
 
-  @media (min-width: 1820px) {
+  @media (min-width: 1820px), (max-width: 1159px) {
     grid-template-columns: none;
     grid-template-rows: 1fr 1fr;
   }
@@ -37,7 +37,7 @@
 .translate > div {
   margin-bottom: var(--demo-box-size);
 
-  @media (min-width: 1820px) {
+  @media (min-width: 1820px), (max-width: 1159px) {
     margin-bottom: 0;
     margin-right: var(--demo-box-size);
   }

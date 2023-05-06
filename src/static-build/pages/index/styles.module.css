@@ -24,8 +24,12 @@
   --accent: var(--blue-1);
   --accent-2: var(--red-1);
 
-  --ui-side-margin: 10px;
+  --ui-side-margin: 0px;
   --content-side-padding: 30px;
+
+  @media (min-width: 1160px) {
+    --ui-side-margin: 10px;
+  }
 }
 
 /*
@@ -66,9 +70,10 @@ body {
 }
 
 :global(#app) {
-  margin: var(--ui-side-margin);
+  margin-top: 20px;
 
   @media (min-width: 1160px) {
+    margin: var(--ui-side-margin);
     display: grid;
     overflow: hidden;
     gap: var(--ui-side-margin);

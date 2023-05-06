@@ -81,10 +81,12 @@
   display: grid;
   overflow: hidden;
   position: relative;
-  height: 50svh;
+  height: 80svh;
+  max-height: 650px;
 
   @media (min-width: 1160px) {
     height: auto;
+    max-height: none;
   }
 }
 
@@ -96,7 +98,7 @@
   width: var(--size);
   display: grid;
 
-  @media (min-width: 1820px) {
+  @media (min-width: 1820px), (max-width: 1159px) {
     width: auto;
     height: var(--size);
     inset: var(--content-side-padding);
@@ -107,6 +109,7 @@
 .preview-section-header {
   display: grid;
   grid-template-columns: 1fr auto;
+  gap: 1rem;
 }
 
 .input {
