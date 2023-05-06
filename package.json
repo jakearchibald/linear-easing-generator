@@ -16,7 +16,6 @@
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-replace": "^5.0.2",
     "@rollup/plugin-terser": "^0.4.0",
-    "@surma/rollup-plugin-off-main-thread": "^2.2.3",
     "@types/mime-types": "^2.1.1",
     "@types/node": "^18.11.18",
     "codemirror": "^6.0.1",
