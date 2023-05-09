@@ -145,6 +145,10 @@
   align-content: center;
   justify-content: center;
 
+  &:focus {
+    border-color: var(--text-1);
+  }
+
   & > svg {
     --size: 27px;
     width: var(--size);
