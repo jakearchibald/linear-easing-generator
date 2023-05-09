@@ -12,6 +12,10 @@
   padding: 0.2rem 0.7rem 0.2rem 0.8rem;
   gap: 0.8rem;
   align-items: center;
+
+  svg {
+    width: 100%;
+  }
 }
 
 .real-select {
