@@ -164,25 +164,31 @@ const Graph: FunctionComponent<Props> = ({
       : '',
   );
 
+  const hideSVG = useComputed(() =>
+    fullPoints.value === null ? 'visibility: hidden;' : '',
+  );
+
   return (
     <div ref={containerRef} class={styles.graphComponent}>
-      <svg class={styles.graphSvg} viewBox={svgViewBox}>
-        <path class={styles.graphSublines} d={graphSubLinesPath} />
-        <path class={styles.graphAxis} d={graphAxisPath} />
-        <svg
-          class={styles.pointsSvg}
-          width={canvasScale}
-          height={canvasScale}
-          viewBox="0 0 1 1"
-        >
-          <path
-            class={styles.fullPath}
-            style={fullPathStyle}
-            d={fullPointsPath}
-          />
-          <path class={styles.optimizedPath} d={optimizedPath} />
+      {!__PRERENDER__ && (
+        <svg style={hideSVG} class={styles.graphSvg} viewBox={svgViewBox}>
+          <path class={styles.graphSublines} d={graphSubLinesPath} />
+          <path class={styles.graphAxis} d={graphAxisPath} />
+          <svg
+            class={styles.pointsSvg}
+            width={canvasScale}
+            height={canvasScale}
+            viewBox="0 0 1 1"
+          >
+            <path
+              class={styles.fullPath}
+              style={fullPathStyle}
+              d={fullPointsPath}
+            />
+            <path class={styles.optimizedPath} d={optimizedPath} />
+          </svg>
         </svg>
-      </svg>
+      )}
     </div>
   );
 };

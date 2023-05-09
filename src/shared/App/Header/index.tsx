@@ -18,6 +18,7 @@ import * as styles from './styles.module.css';
 import Select from '../Select';
 import { bounce, elastic, materialEmphasized, spring } from '../demos';
 import { State } from '../types';
+import { hideFromPrerender } from '../utils';
 
 const demos = {
   Spring: spring,
@@ -38,18 +39,20 @@ const Header: FunctionalComponent<Props> = ({ onPresetSelect }) => {
       <h1 class={styles.siteTitle}>
         linear()<span class={styles.extendedTitle}> generator</span>
       </h1>
-      <Select
-        value={selectValue}
-        onChange={(newVal) => {
-          const val = newVal as keyof typeof demos | '';
-          if (val) onPresetSelect(demos[newVal as keyof typeof demos]);
-        }}
-      >
-        <option value="">Presets</option>
-        {Object.keys(demos).map((name) => (
-          <option value={name}>{name}</option>
-        ))}
-      </Select>
+      <div style={hideFromPrerender}>
+        <Select
+          value={selectValue}
+          onChange={(newVal) => {
+            const val = newVal as keyof typeof demos | '';
+            if (val) onPresetSelect(demos[newVal as keyof typeof demos]);
+          }}
+        >
+          <option value="">Presets</option>
+          {Object.keys(demos).map((name) => (
+            <option value={name}>{name}</option>
+          ))}
+        </Select>
+      </div>
     </header>
   );
 };

@@ -15,6 +15,7 @@ import useURLState from './useURLState';
 import CopyButton from './CopyButton';
 import Input from './Input';
 import Header from './Header';
+import { hideFromPrerender } from './utils';
 
 interface Props {}
 
@@ -91,7 +92,7 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
                 <h2>Preview</h2>
                 <p>Here's how it looks:</p>
               </div>
-              <label class={styles.selectLabel}>
+              <label class={styles.selectLabel} style={hideFromPrerender}>
                 <span class={styles.labelTextEnd}>Duration</span>
                 <input
                   class={[styles.input, styles.durationInput].join(' ')}
@@ -105,6 +106,7 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
                 />
               </label>
               <button
+                style={hideFromPrerender}
                 class={styles.sectionHeaderIconButton}
                 onClick={() => (playAnims.value = !playAnims.value)}
               >

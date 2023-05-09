@@ -6,6 +6,7 @@ import Editor from '../Editor';
 import * as sharedStyles from '../styles.module.css';
 import { defaultJS, defaultSVG } from '../demos';
 import Select from '../Select';
+import { hideFromPrerender } from '../utils';
 
 function useCachedFormatCodes(
   code: Signal<string>,
@@ -56,7 +57,7 @@ const Input: FunctionComponent<Props> = ({
           <h2>Input</h2>
           <p>Provide easing as JavaScript or SVG</p>
         </div>
-        <label class={sharedStyles.selectLabel}>
+        <label class={sharedStyles.selectLabel} style={hideFromPrerender}>
           <span class={sharedStyles.labelTextEnd}>Format</span>
           <Select value={codeTypeString} onChange={onSelectChange}>
             <option value={CodeType.JS}>JS</option>

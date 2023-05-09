@@ -2,7 +2,7 @@ import { Signal } from '@preact/signals';
 import { h, RenderableProps, FunctionComponent } from 'preact';
 import * as sharedStyles from '../styles.module.css';
 import { useRef } from 'preact/hooks';
-import { animateFrom } from '../utils';
+import { animateFrom, hideFromPrerender } from '../utils';
 
 interface Props {
   value: Signal<string>;
@@ -15,6 +15,7 @@ const CopyButton: FunctionComponent<Props> = ({
 
   return (
     <button
+      style={hideFromPrerender}
       ref={buttonRef}
       class={sharedStyles.sectionHeaderIconButton}
       onClick={() => {

@@ -133,3 +133,5 @@ export function animateFrom(
     { ...options, fill: 'backwards' },
   );
 }
+
+export const hideFromPrerender = __PRERENDER__ ? 'visibility: hidden' : '';

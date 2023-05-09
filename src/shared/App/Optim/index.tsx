@@ -5,6 +5,7 @@ import 'add-css:./styles.module.css';
 import * as styles from './styles.module.css';
 import * as sharedStyles from '../styles.module.css';
 import Range from '../Range';
+import { hideFromPrerender } from '../utils';
 
 interface Props {
   simplify: Signal<number>;
@@ -19,7 +20,7 @@ const Optim: FunctionComponent<Props> = ({
 }: RenderableProps<Props>) => {
   return (
     <form class={styles.form}>
-      <label>
+      <label style={hideFromPrerender}>
         <span class={sharedStyles.labelText}>Simplify</span>
         <Range
           min={0.00001}
@@ -29,7 +30,7 @@ const Optim: FunctionComponent<Props> = ({
           value={simplify}
         />
       </label>
-      <label>
+      <label style={hideFromPrerender}>
         <span class={sharedStyles.labelText}>Round</span>
         <Range
           min={2}

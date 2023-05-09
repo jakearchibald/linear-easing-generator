@@ -2,6 +2,7 @@
   display: grid;
   grid-template-rows: 1fr auto;
   overflow: hidden;
+  background: var(--editor-background);
 }
 
 .editor-container {
