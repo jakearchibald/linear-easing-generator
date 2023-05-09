@@ -30,13 +30,13 @@ const toOutput: Output = {
   'index.html': renderPage(<IndexPage />),
   '/process-script/index.html': renderPage(<ProcessScript />),
   'manifest.json': JSON.stringify({
-    name: 'Wordle Analyzer',
-    short_name: 'Wordle Analyzer',
+    name: 'linear() easing generator',
+    short_name: 'linear()',
     start_url: '/',
     display: 'standalone',
     orientation: 'any',
     background_color: '#fff',
-    theme_color: '#6aaa64',
+    theme_color: '#009dff',
     icons: [
       {
         src: maskableIconURL.default,
@@ -50,7 +50,7 @@ const toOutput: Output = {
         sizes: manifestSize(socialIconURL),
       },
     ],
-    description: 'Discover if your Wordle guesses were luck, or genius.',
+    description: 'Generate linear() easings from JavaScript and SVG',
     lang: 'en',
   }),
 };

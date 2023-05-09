@@ -17,7 +17,7 @@ import initialCss from 'prerender-css:';
 import url, { allSrc, imports } from 'client-bundle:client/main';
 import analyticsUrl from 'client-bundle:client/analytics/index.js';
 import faviconURL from 'url:static-build/assets/favicon.png';
-import socialImageURL from 'url:static-build/assets/social-large.png';
+import socialImageURL from 'url:static-build/assets/social-icon.png';
 // import ogImage from 'url:static-build/assets/icon-large-maskable.png';
 import { escapeStyleScriptContent, siteOrigin } from 'static-build/utils';
 import App from 'shared/App';
@@ -28,10 +28,10 @@ const Index: FunctionalComponent<Props> = () => (
   <html lang="en">
     <head>
       <title>Linear easing generator</title>
-      <meta name="theme-color" content="#6aaa64" />
+      <meta name="theme-color" content="#009dff" />
       <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
       <link rel="icon" type="image/png" href={faviconURL} />
-      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:card" content="summary" />
       <meta
         property="twitter:image"
         content={`${siteOrigin}${socialImageURL}`}
@@ -42,7 +42,7 @@ const Index: FunctionalComponent<Props> = () => (
       <meta property="og:title" content="Linear easing generator" />
       <meta
         property="og:description"
-        content="Generate linear() from JavaScript and SVG"
+        content="Generate linear() easings from JavaScript and SVG"
       />
       <link rel="manifest" href="/manifest.json" />
       {

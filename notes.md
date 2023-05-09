@@ -1,10 +1,7 @@
 TODOs:
 
-- Unsupported message
-- Analytics
-- Icon/logo
-- Social image
 - What if duration isn't a number
+- Ditch lowest rounding
 
 - Sticky mobile view
 - Github link
@@ -16,4 +13,4 @@ TODOs:
 - No-JS view check - avoid rendering buttons etc
 - Review lots of viewport sizes
 - Cross browser check
-- defaulting to https://wordle-analyzer.com
+- search for "wordle"

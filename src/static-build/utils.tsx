@@ -57,7 +57,7 @@ export function escapeStyleScriptContent(str: string): string {
     .replace(/<\/style/g, '<\\/style');
 }
 
-const productionURL = 'https://wordle-analyzer.com';
+const productionURL = 'https://linear-easing-generator.netlify.app';
 
 /**
  * Origin of the site, depending on the environment.
