@@ -12,6 +12,7 @@ import { useMatchMedia } from '../utils';
 
 interface Props {
   linear: Signal<string[]>;
+  play: Signal<boolean>;
   slightlyOptimizedLinear: Signal<string[]>;
   duration: Signal<number>;
 }
@@ -39,9 +40,13 @@ const Demos: FunctionComponent<Props> = ({
   slightlyOptimizedLinear,
   linear,
   duration,
+  play,
 }: RenderableProps<Props>) => {
   const slightlyOptimizedLinearStr = useLinearValue(slightlyOptimizedLinear);
   const linearStr = useLinearValue(linear);
+  const computedPlayState = useComputed(() =>
+    Boolean(play.value && slightlyOptimizedLinearStr.value && linearStr.value),
+  );
   const demos = useRef<HTMLDivElement>(null);
   const slightlyOptimizedTranslateEl = useRef<HTMLDivElement>(null);
   const translateEl = useRef<HTMLDivElement>(null);
@@ -94,7 +99,7 @@ const Demos: FunctionComponent<Props> = ({
         };
 
         await Promise.all(outAnims.map((a) => a.finished));
-        await document.body.animate(null, gap).finished;
+        await slightlyOptimizedTranslateEl.current!.animate(null, gap).finished;
 
         if (stop) break;
 
@@ -122,7 +127,7 @@ const Demos: FunctionComponent<Props> = ({
         };
 
         await Promise.all(inAnims.map((a) => a.finished));
-        await document.body.animate(null, gap).finished;
+        await slightlyOptimizedTranslateEl.current!.animate(null, gap).finished;
       }
     })();
 
@@ -166,6 +171,24 @@ const Demos: FunctionComponent<Props> = ({
 
     for (const anim of anims) {
       anim.effect!.updateTiming({ duration: duration.value });
+    }
+  });
+
+  // Changes to play state
+  useSignalEffect(() => {
+    const anims = [
+      slightlyOptimizedTranslateEl.current!,
+      translateEl.current!,
+    ].flatMap((el) => el.getAnimations());
+
+    for (const anim of anims) {
+      if (anim.playState === 'finished') continue;
+
+      if (computedPlayState.value) {
+        anim.play();
+      } else {
+        anim.pause();
+      }
     }
   });
 

@@ -3,8 +3,6 @@ import { h, RenderableProps, FunctionComponent, Fragment } from 'preact';
 import { useRef } from 'preact/hooks';
 import { CodeHighlight, CodeType } from '../types';
 import Editor from '../Editor';
-import 'add-css:./styles.module.css';
-import * as styles from './styles.module.css';
 import * as sharedStyles from '../styles.module.css';
 import { bounce, materialEmphasized } from '../demos';
 import Select from '../Select';
@@ -53,11 +51,7 @@ const Input: FunctionComponent<Props> = ({
 
   return (
     <>
-      <div
-        class={[sharedStyles.sectionHeader, styles.inputSectionHeader].join(
-          ' ',
-        )}
-      >
+      <div class={sharedStyles.sectionHeader}>
         <div class={sharedStyles.sectionHeaderTitle}>
           <h2>Input</h2>
           <p>Provide easing as JavaScript or SVG</p>

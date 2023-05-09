@@ -1,21 +1,21 @@
 TODOs:
 
-- Play/pause button
-- Prefers reduced motion (auto-pause)
 - Copy button
 - Presets
 - 'Docs' in initial example
 - Unsupported message
 - Analytics
-- Icon
+- Icon/logo
 - Social image
+- What if duration isn't a number
 
 - Sticky mobile view
 - Github link
 - Service worker
+- Store duration in url?
 - Dark mode
 
-- No-JS view check
+- No-JS view check - avoid rendering buttons etc
 - Review lots of viewport sizes
 - Cross browser check
 - defaulting to https://wordle-analyzer.com

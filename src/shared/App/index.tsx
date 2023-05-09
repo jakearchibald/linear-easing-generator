@@ -18,9 +18,14 @@ import Input from './Input';
 
 interface Props {}
 
+const initiallyPlay = __PRERENDER__
+  ? true
+  : matchMedia('(prefers-reduced-motion: no-preference)').matches;
+
 const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
   const { codeType, code, simplify, round, update } = useURLState();
 
+  const playAnims = useSignal(initiallyPlay);
   const durationInputValue = useSignal('1.5');
   const duration = useComputed(
     () => (Number(durationInputValue.value) || 1.5) * 1000,
@@ -52,6 +57,18 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
     useSignal(5),
   );
 
+  const playToggleText = useComputed(() =>
+    playAnims.value ? 'Pause' : 'Play',
+  );
+
+  const playToggleIconPath = useComputed(() =>
+    playAnims.value
+      ? // Pause icon
+        'M525 856V296h235v560H525Zm-325 0V296h235v560H200Zm385-60h115V356H585v440Zm-325 0h115V356H260v440Zm0-440v440-440Zm325 0v440-440Z'
+      : // Play icon
+        'M320 853V293l440 280-440 280Zm60-280Zm0 171 269-171-269-171v342Z',
+  );
+
   return (
     <>
       <div class={styles.appModule} style={{ gridArea: 'input' }}>
@@ -64,11 +81,7 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
       </div>
       <div class={styles.previewOutput} style={{ gridArea: 'preview-output' }}>
         <div class={styles.appModule} style={{ gridArea: 'preview' }}>
-          <div
-            class={[styles.sectionHeader, styles.previewSectionHeader].join(
-              ' ',
-            )}
-          >
+          <div class={styles.sectionHeader}>
             <div class={styles.sectionHeaderTitle}>
               <h2>Preview</h2>
               <p>Here's how it looks:</p>
@@ -86,6 +99,17 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
                 }
               />
             </label>
+            <button
+              class={styles.sectionHeaderIconButton}
+              onClick={() => (playAnims.value = !playAnims.value)}
+            >
+              <span class={styles.sectionHeaderIconButtonText}>
+                {playToggleText}
+              </span>
+              <svg viewBox="0 96 960 960">
+                <path d={playToggleIconPath} />
+              </svg>
+            </button>
           </div>
           <div class={styles.previewContent}>
             <Graph
@@ -94,6 +118,7 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
             />
             <div class={styles.animatedDemos}>
               <AnimatedDemos
+                play={playAnims}
                 duration={duration}
                 linear={linear}
                 slightlyOptimizedLinear={slightlyOptimizedLinear}
