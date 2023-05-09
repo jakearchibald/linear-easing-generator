@@ -15,6 +15,7 @@ import useURLState from './useURLState';
 import DemoLinks from './DemoLinks';
 import CopyButton from './CopyButton';
 import Input from './Input';
+import Header from './Header';
 
 interface Props {}
 
@@ -71,86 +72,92 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
 
   return (
     <>
-      <div class={styles.appModule} style={{ gridArea: 'input' }}>
-        <Input
-          code={code}
-          codeType={codeType}
-          error={codeError}
-          onChange={(code, codeType) => update({ code, codeType })}
-        />
-      </div>
-      <div class={styles.previewOutput} style={{ gridArea: 'preview-output' }}>
-        <div class={styles.appModule} style={{ gridArea: 'preview' }}>
-          <div class={styles.sectionHeader}>
-            <div class={styles.sectionHeaderTitle}>
-              <h2>Preview</h2>
-              <p>Here's how it looks:</p>
+      <Header onPresetSelect={(newState) => update(newState)} />
+      <div class={styles.appGrid}>
+        <div class={styles.appModule} style={{ gridArea: 'input' }}>
+          <Input
+            code={code}
+            codeType={codeType}
+            error={codeError}
+            onChange={(code, codeType) => update({ code, codeType })}
+          />
+        </div>
+        <div
+          class={styles.previewOutput}
+          style={{ gridArea: 'preview-output' }}
+        >
+          <div class={styles.appModule} style={{ gridArea: 'preview' }}>
+            <div class={styles.sectionHeader}>
+              <div class={styles.sectionHeaderTitle}>
+                <h2>Preview</h2>
+                <p>Here's how it looks:</p>
+              </div>
+              <label class={styles.selectLabel}>
+                <span class={styles.labelTextEnd}>Duration</span>
+                <input
+                  class={[styles.input, styles.durationInput].join(' ')}
+                  type="number"
+                  value={durationInputValue}
+                  onInput={(event) =>
+                    (durationInputValue.value = (
+                      event.target as HTMLInputElement
+                    ).value)
+                  }
+                />
+              </label>
+              <button
+                class={styles.sectionHeaderIconButton}
+                onClick={() => (playAnims.value = !playAnims.value)}
+              >
+                <span class={styles.sectionHeaderIconButtonText}>
+                  {playToggleText}
+                </span>
+                <svg viewBox="0 96 960 960">
+                  <path d={playToggleIconPath} />
+                </svg>
+              </button>
             </div>
-            <label class={styles.selectLabel}>
-              <span class={styles.labelTextEnd}>Duration</span>
-              <input
-                class={[styles.input, styles.durationInput].join(' ')}
-                type="number"
-                value={durationInputValue}
-                onInput={(event) =>
-                  (durationInputValue.value = (
-                    event.target as HTMLInputElement
-                  ).value)
-                }
+            <div class={styles.previewContent}>
+              <Graph
+                fullPoints={graphFullPoints}
+                optimizedPoints={optimizedPoints}
               />
-            </label>
-            <button
-              class={styles.sectionHeaderIconButton}
-              onClick={() => (playAnims.value = !playAnims.value)}
-            >
-              <span class={styles.sectionHeaderIconButtonText}>
-                {playToggleText}
-              </span>
-              <svg viewBox="0 96 960 960">
-                <path d={playToggleIconPath} />
-              </svg>
-            </button>
+              <div class={styles.animatedDemos}>
+                <AnimatedDemos
+                  play={playAnims}
+                  duration={duration}
+                  linear={linear}
+                  slightlyOptimizedLinear={slightlyOptimizedLinear}
+                />
+              </div>
+            </div>
           </div>
-          <div class={styles.previewContent}>
-            <Graph
-              fullPoints={graphFullPoints}
-              optimizedPoints={optimizedPoints}
+          <div class={styles.appModule} style={{ gridArea: 'output' }}>
+            <div class={styles.sectionHeader}>
+              <div class={styles.sectionHeaderTitle}>
+                <h2>Output</h2>
+                <p>Some shiny new CSS!</p>
+              </div>
+              <CopyButton value={friendlyExample} />
+            </div>
+            <Editor
+              code={friendlyExample}
+              language={signal(CodeHighlight.CSS)}
+              readOnly
             />
-            <div class={styles.animatedDemos}>
-              <AnimatedDemos
-                play={playAnims}
-                duration={duration}
-                linear={linear}
-                slightlyOptimizedLinear={slightlyOptimizedLinear}
-              />
-            </div>
           </div>
-        </div>
-        <div class={styles.appModule} style={{ gridArea: 'output' }}>
-          <div class={styles.sectionHeader}>
-            <div class={styles.sectionHeaderTitle}>
-              <h2>Output</h2>
-              <p>Some shiny new CSS!</p>
-            </div>
-            <CopyButton value={friendlyExample} />
+          <div class={styles.appModule} style={{ gridArea: 'simplify' }}>
+            <Optim
+              onInput={(newSimplify, newRound) =>
+                update({
+                  simplify: newSimplify,
+                  round: newRound,
+                })
+              }
+              round={round}
+              simplify={simplify}
+            />
           </div>
-          <Editor
-            code={friendlyExample}
-            language={signal(CodeHighlight.CSS)}
-            readOnly
-          />
-        </div>
-        <div class={styles.appModule} style={{ gridArea: 'simplify' }}>
-          <Optim
-            onInput={(newSimplify, newRound) =>
-              update({
-                simplify: newSimplify,
-                round: newRound,
-              })
-            }
-            round={round}
-            simplify={simplify}
-          />
         </div>
       </div>
     </>

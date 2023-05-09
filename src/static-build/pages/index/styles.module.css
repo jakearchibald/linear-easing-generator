@@ -70,27 +70,13 @@ body {
 body {
   margin: 0;
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: 1fr;
 }
 
 :global(#app) {
-  margin-top: 20px;
-
-  @media (min-width: 1160px) {
-    margin: var(--ui-side-margin);
-    display: grid;
-    overflow: hidden;
-    gap: var(--ui-side-margin);
-
-    grid-template:
-      'input preview-output' 1fr
-      / 1fr 1fr;
-  }
-  @media (min-width: 1820px) {
-    grid-template:
-      'input preview-output preview-output' 1fr
-      / 1fr 1fr 1fr;
-  }
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
 }
 
 a {

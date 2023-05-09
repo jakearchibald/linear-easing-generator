@@ -1,11 +1,6 @@
 .select {
   overflow: clip;
   position: relative;
-  display: grid;
-
-  > * {
-    grid-area: 1/1;
-  }
 }
 
 .select-current {
@@ -22,4 +17,9 @@
 .real-select {
   font-size: inherit;
   opacity: 0;
+  position: absolute;
+  min-width: 100%;
+  min-height: 100%;
+  top: 0;
+  right: 0;
 }
