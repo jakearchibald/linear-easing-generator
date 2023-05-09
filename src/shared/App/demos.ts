@@ -95,3 +95,6 @@ export const spring = {
   codeType: CodeType.JS,
   code: springCode,
 };
+
+export const defaultJS = spring;
+export const defaultSVG = materialEmphasized;

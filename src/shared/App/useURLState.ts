@@ -1,7 +1,7 @@
 import { ReadonlySignal, useSignal, batch } from '@preact/signals';
 import { useCallback, useMemo, useRef } from 'preact/hooks';
 import { CodeType, State } from './types';
-import { bounce, materialEmphasized, spring, elastic } from './demos';
+import { defaultJS, defaultSVG } from './demos';
 import { getURLParamsFromState } from './utils';
 
 interface UseURLStateReturn {
@@ -47,7 +47,7 @@ export default function useURLState(): UseURLStateReturn {
   const codeType = useSignal(defaultCodeType);
   const code = useSignal(
     originalURLState.code ||
-      (defaultCodeType === CodeType.JS ? spring.code : materialEmphasized.code),
+      (defaultCodeType === CodeType.JS ? defaultJS.code : defaultSVG.code),
   );
 
   const simplify = useSignal(originalURLState.simplify ?? 0.0017);

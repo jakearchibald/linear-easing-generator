@@ -4,15 +4,15 @@ import { useRef } from 'preact/hooks';
 import { CodeHighlight, CodeType } from '../types';
 import Editor from '../Editor';
 import * as sharedStyles from '../styles.module.css';
-import { bounce, materialEmphasized } from '../demos';
+import { defaultJS, defaultSVG } from '../demos';
 import Select from '../Select';
 
 function useCachedFormatCodes(
   code: Signal<string>,
   codeType: Signal<CodeType>,
 ) {
-  const lastJSCode = useRef(bounce.code);
-  const lastSVGCode = useRef(materialEmphasized.code);
+  const lastJSCode = useRef(defaultJS.code);
+  const lastSVGCode = useRef(defaultSVG.code);
 
   useSignalEffect(() => {
     if (codeType.value === CodeType.JS) {
