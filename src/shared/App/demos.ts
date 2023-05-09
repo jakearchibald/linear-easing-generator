@@ -1,7 +1,6 @@
 import { CodeType } from './types';
 
-const bounceCode = `// Write/paste an easing function:
-self.bounce = function(pos) {
+const bounceCode = `self.bounce = function(pos) {
   const n1 = 7.5625;
   const d1 = 2.75;
 
@@ -33,7 +32,18 @@ const springCode = `const [duration, func] = createSpring({
   velocity: 0,
 });
 
+/*
+  Export your easing function as a global.
+  The name you use here will appear in the output.
+  The easing function must take a number as input,
+  where 0 is the start, and 1 is the end.
+  It must return the 'eased' value.
+*/
 self.spring = func;
+/*
+  Some easings have an ideal duration, like this one.
+  Export it to the global, and it will be used in the output.
+*/
 self.duration = duration;
 
 function createSpring({ mass, stiffness, damping, velocity }) {

@@ -1,7 +1,5 @@
 TODOs:
 
-- Presets
-- 'Docs' in initial example
 - Unsupported message
 - Analytics
 - Icon/logo
