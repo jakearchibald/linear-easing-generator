@@ -15,4 +15,22 @@
 }
 
 .error {
+  background: #290000;
+  border-top: 1px solid #5c0000;
+  color: #ff8080;
+  display: grid;
+  font-family: menlo, consolas, lucida console, courier new, dejavu sans mono,
+    monospace;
+  font-size: 13px;
+  grid-template-columns: auto 1fr;
+  padding: 5px 8px;
+  gap: 5px;
+
+  &::before {
+    content: url('images/error.svg');
+    --size: 15px;
+    width: var(--size);
+    height: var(--size);
+    margin-top: 1px;
+  }
 }

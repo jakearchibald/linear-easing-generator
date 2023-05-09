@@ -5,7 +5,12 @@ import { javascript } from '@codemirror/lang-javascript';
 import { cssLanguage } from '@codemirror/lang-css';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { EditorState, Compartment } from '@codemirror/state';
-import { ReadonlySignal, signal, useSignalEffect } from '@preact/signals';
+import {
+  ReadonlySignal,
+  signal,
+  useComputed,
+  useSignalEffect,
+} from '@preact/signals';
 import { CodeHighlight } from '../types';
 import 'add-css:./styles.module.css';
 import * as styles from './styles.module.css';
@@ -151,10 +156,12 @@ const Editor: FunctionComponent<Props> = ({
     });
   }, [readOnly]);
 
+  const errorStyle = useComputed(() => (error.value ? '' : 'display: none'));
+
   return (
     <div class={styles.component}>
       <div class={styles.editorContainer} ref={editorContainerRef} />
-      <div class={styles.error} aria-live="polite">
+      <div style={errorStyle} class={styles.error} aria-live="polite">
         {error}
       </div>
     </div>
