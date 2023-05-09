@@ -41,8 +41,6 @@ const Header: FunctionalComponent<Props> = ({ onPresetSelect }) => {
         onChange={(newVal) => {
           const val = newVal as keyof typeof demos | '';
           if (val) onPresetSelect(demos[newVal as keyof typeof demos]);
-          selectValue.value = '.';
-          selectValue.value = '';
         }}
       >
         <option value="">Presets</option>
