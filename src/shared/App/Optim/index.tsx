@@ -32,7 +32,7 @@ const Optim: FunctionComponent<Props> = ({
       <label>
         <span class={sharedStyles.labelText}>Round</span>
         <Range
-          min={1}
+          min={2}
           max={5}
           step={1}
           onInput={(newVal) => onInput(simplify.value, newVal)}

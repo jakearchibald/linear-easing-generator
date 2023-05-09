@@ -1,8 +1,5 @@
 TODOs:
 
-- What if duration isn't a number
-- Ditch lowest rounding
-
 - Sticky mobile view
 - Github link
 - Service worker
@@ -13,4 +10,3 @@ TODOs:
 - No-JS view check - avoid rendering buttons etc
 - Review lots of viewport sizes
 - Cross browser check
-- search for "wordle"

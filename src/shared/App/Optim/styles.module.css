@@ -1,6 +1,6 @@
 .form {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1fr 135px;
   background: var(--surface-1);
   padding: 0 var(--content-side-padding);
   min-height: 100px;
