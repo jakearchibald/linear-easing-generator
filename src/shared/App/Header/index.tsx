@@ -35,7 +35,9 @@ const Header: FunctionalComponent<Props> = ({ onPresetSelect }) => {
 
   return (
     <header class={styles.siteHeader}>
-      <h1 class={styles.siteTitle}>linear()</h1>
+      <h1 class={styles.siteTitle}>
+        linear()<span class={styles.extendedTitle}> generator</span>
+      </h1>
       <Select
         value={selectValue}
         onChange={(newVal) => {

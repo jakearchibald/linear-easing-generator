@@ -12,3 +12,11 @@
   margin: 0;
   padding: 0.9rem 0;
 }
+
+.extended-title {
+  display: none;
+
+  @media (min-width: 450px) {
+    display: inline;
+  }
+}
