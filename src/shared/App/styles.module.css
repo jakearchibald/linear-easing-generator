@@ -145,7 +145,7 @@
   align-content: center;
   justify-content: center;
 
-  &:focus {
+  &:focus-visible {
     border-color: var(--text-1);
   }
 
