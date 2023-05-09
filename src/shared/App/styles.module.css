@@ -135,7 +135,7 @@
   all: unset;
   cursor: pointer;
   display: inline-block;
-  border: 1px solid var(--surface-4);
+  border: 1.5px solid var(--surface-4);
   --size: 39px;
   width: var(--size);
   height: var(--size);
@@ -150,7 +150,7 @@
   }
 
   & > svg {
-    --size: 27px;
+    --size: 24px;
     width: var(--size);
     height: var(--size);
     fill: var(--icon-color);

@@ -132,6 +132,7 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
               <h2>Output</h2>
               <p>Some shiny new CSS!</p>
             </div>
+            <CopyButton value={friendlyExample} />
           </div>
           <Editor
             code={friendlyExample}
@@ -152,13 +153,6 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
           />
         </div>
       </div>
-      {/*
-
-      <DemoLinks onStateUpdate={(newState) => update(newSta
-
-
-      <CopyButton value={friendlyExample} />
-      */}
     </>
   );
 };
