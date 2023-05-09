@@ -123,4 +123,12 @@
 
 .duration-input {
   width: 60px;
+  -moz-appearance: textfield;
+  text-align: right;
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }
