@@ -76,7 +76,10 @@ body {
 :global(#app) {
   display: grid;
   grid-template-rows: auto 1fr;
-  overflow: hidden;
+
+  @media (min-width: 1160px) {
+    overflow: hidden;
+  }
 }
 
 a {

@@ -183,3 +183,41 @@
   height: 0;
   opacity: 0;
 }
+
+.simplify-module {
+  @media (max-width: 1159px) {
+    position: sticky;
+    bottom: 0;
+    overflow: visible;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 100%;
+      height: 12px;
+      pointer-events: none;
+      opacity: 0.1;
+      background: linear-gradient(
+        to bottom,
+        hsla(0, 0%, 0%, 0) 0%,
+        hsla(0, 0%, 0%, 0.013) 8.1%,
+        hsla(0, 0%, 0%, 0.049) 15.5%,
+        hsla(0, 0%, 0%, 0.104) 22.5%,
+        hsla(0, 0%, 0%, 0.175) 29%,
+        hsla(0, 0%, 0%, 0.259) 35.3%,
+        hsla(0, 0%, 0%, 0.352) 41.2%,
+        hsla(0, 0%, 0%, 0.45) 47.1%,
+        hsla(0, 0%, 0%, 0.55) 52.9%,
+        hsla(0, 0%, 0%, 0.648) 58.8%,
+        hsla(0, 0%, 0%, 0.741) 64.7%,
+        hsla(0, 0%, 0%, 0.825) 71%,
+        hsla(0, 0%, 0%, 0.896) 77.5%,
+        hsla(0, 0%, 0%, 0.951) 84.5%,
+        hsla(0, 0%, 0%, 0.987) 91.9%,
+        hsl(0, 0%, 0%) 100%
+      );
+    }
+  }
+}

@@ -146,7 +146,10 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
               readOnly
             />
           </div>
-          <div class={styles.appModule} style={{ gridArea: 'simplify' }}>
+          <div
+            class={[styles.appModule, styles.simplifyModule].join(' ')}
+            style={{ gridArea: 'simplify' }}
+          >
             <Optim
               onInput={(newSimplify, newRound) =>
                 update({
