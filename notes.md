@@ -1,6 +1,5 @@
 TODOs:
 
-- Copy button
 - Presets
 - 'Docs' in initial example
 - Unsupported message
