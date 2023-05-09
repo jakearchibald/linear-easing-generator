@@ -23,6 +23,9 @@
 
   --accent: var(--blue-1);
   --accent-2: var(--red-1);
+  --error-background: #290000;
+  --error-border: #5c0000;
+  --error-text: #ff8080;
 
   --ui-side-margin: 0px;
   --content-side-padding: 30px;
