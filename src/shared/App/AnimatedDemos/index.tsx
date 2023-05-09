@@ -1,14 +1,8 @@
-import {
-  Signal,
-  useComputed,
-  useSignal,
-  useSignalEffect,
-} from '@preact/signals';
+import { Signal, useComputed, useSignalEffect } from '@preact/signals';
 import { h, Fragment, RenderableProps, FunctionComponent } from 'preact';
 import 'add-css:./styles.module.css';
 import * as styles from './styles.module.css';
 import { useEffect, useRef } from 'preact/hooks';
-import { useMatchMedia } from '../utils';
 
 interface Props {
   linear: Signal<string[]>;
@@ -16,6 +10,10 @@ interface Props {
   slightlyOptimizedLinear: Signal<string[]>;
   duration: Signal<number>;
 }
+
+const linearSupported = __PRERENDER__
+  ? true
+  : CSS.supports('animation-timing-function', 'linear(0, 1)');
 
 const gap = 500;
 
@@ -74,6 +72,8 @@ const Demos: FunctionComponent<Props> = ({
     ];
 
     (async () => {
+      if (!linearSupported) return;
+
       while (!stop) {
         const outAnims = [
           anim(
@@ -139,7 +139,11 @@ const Demos: FunctionComponent<Props> = ({
 
   // Updates to easing
   useSignalEffect(() => {
-    if (slightlyOptimizedLinearStr.value === '' || linearStr.value === '') {
+    if (
+      slightlyOptimizedLinearStr.value === '' ||
+      linearStr.value === '' ||
+      !linearSupported
+    ) {
       return;
     }
 
@@ -160,7 +164,11 @@ const Demos: FunctionComponent<Props> = ({
 
   // Updates to duration
   useSignalEffect(() => {
-    if (slightlyOptimizedLinearStr.value === '' || linearStr.value === '') {
+    if (
+      slightlyOptimizedLinearStr.value === '' ||
+      linearStr.value === '' ||
+      !linearSupported
+    ) {
       return;
     }
 
@@ -204,6 +212,19 @@ const Demos: FunctionComponent<Props> = ({
           <div class={styles.demoBox}>Output</div>
         </div>
       </div>
+      {!linearSupported && (
+        <div class={styles.unsupportedMessage}>
+          <div>
+            linear() not supported by this browser.{' '}
+            <a
+              href="https://caniuse.com/mdn-css_types_easing-function_linear-function"
+              target="_blank"
+            >
+              See browser support.
+            </a>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

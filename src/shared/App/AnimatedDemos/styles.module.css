@@ -4,6 +4,7 @@
   background: var(--surface-1);
   display: grid;
   align-items: center;
+  position: relative;
 }
 
 .demo-box {
@@ -40,5 +41,21 @@
   @media (min-width: 1820px), (max-width: 1159px) {
     margin-bottom: 0;
     margin-right: var(--demo-box-size);
+  }
+}
+
+.unsupported-message {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  justify-content: center;
+  text-align: center;
+  background: var(--surface-1);
+  font-size: 0.9rem;
+  padding: 10px;
+
+  a {
+    display: block;
   }
 }
