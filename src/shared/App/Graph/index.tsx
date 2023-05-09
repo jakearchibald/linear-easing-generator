@@ -21,7 +21,7 @@ function useToPath(pointsSignal: Signal<LinearData | string | null>) {
 }
 
 function useCanvasBounds(points: Signal<LinearData | null>) {
-  const [graphSVGRef, containerSize] = useElementSize();
+  const [containerRef, containerSize] = useElementSize();
 
   const valueBounds = useComputed(() => {
     const bounds = { x1: 0, y1: 0, x2: 1, y2: 1 };
@@ -98,7 +98,7 @@ function useCanvasBounds(points: Signal<LinearData | null>) {
     return { scale, x1, x2, y1, y2 };
   });
 
-  return [graphSVGRef, canvasBounds] as const;
+  return [containerRef, canvasBounds] as const;
 }
 
 const Graph: FunctionComponent<Props> = ({
@@ -107,7 +107,7 @@ const Graph: FunctionComponent<Props> = ({
 }: RenderableProps<Props>) => {
   const fullPointsPath = useToPath(fullPoints);
   const optimizedPath = useToPath(optimizedPoints);
-  const [graphSVGRef, canvasBounds] = useCanvasBounds(optimizedPoints);
+  const [containerRef, canvasBounds] = useCanvasBounds(optimizedPoints);
 
   const canvasScale = useComputed(() => canvasBounds.value.scale);
 
@@ -165,8 +165,8 @@ const Graph: FunctionComponent<Props> = ({
   );
 
   return (
-    <div class={styles.graphComponent}>
-      <svg ref={graphSVGRef} class={styles.graphSvg} viewBox={svgViewBox}>
+    <div ref={containerRef} class={styles.graphComponent}>
+      <svg class={styles.graphSvg} viewBox={svgViewBox}>
         <path class={styles.graphSublines} d={graphSubLinesPath} />
         <path class={styles.graphAxis} d={graphAxisPath} />
         <svg
