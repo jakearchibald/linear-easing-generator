@@ -42,7 +42,9 @@ const springCode = `const [duration, func] = createSpring({
 self.spring = func;
 /*
   Some easings have an ideal duration, like this one.
-  Export it to the global, and it will be used in the output.
+  You can export it to the global, in milliseconds,
+  and it will be used in the output.
+  This is optional.
 */
 self.duration = duration;
 
