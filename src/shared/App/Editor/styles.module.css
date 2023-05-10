@@ -40,7 +40,7 @@
   line-height: 1.5;
   font-size: 0.8rem;
 
-  @media (min-width: 1160px) {
+  @media (min-width: 600px) {
     font-size: 0.9rem;
   }
 }
