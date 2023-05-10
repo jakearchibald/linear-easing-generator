@@ -1,12 +1,11 @@
 TODOs:
 
-- Github link
-- Store duration in url?
+- Hide layout shift on mobile
+- Review font size across devices
+- Improve readme
 
-- No-JS view check - avoid rendering buttons etc
-- Review lots of viewport sizes
-- Cross browser check
 - Add duration to output?
+- Store duration in url?
 
 - Dark mode
 - Service worker
