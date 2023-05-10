@@ -164,6 +164,7 @@
   display: grid;
   align-content: center;
   justify-content: center;
+  overflow: hidden;
 
   &:focus-visible {
     border-color: var(--text-1);
@@ -182,6 +183,7 @@
   width: 0;
   height: 0;
   opacity: 0;
+  overflow: hidden;
 }
 
 .simplify-module {
