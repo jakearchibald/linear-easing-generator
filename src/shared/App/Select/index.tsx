@@ -8,6 +8,7 @@ import { VNode } from 'preact';
 
 interface Props {
   value: Signal<string>;
+  displayedValue?: Signal<string>;
   onChange: (value: string) => void;
 }
 
@@ -15,8 +16,11 @@ const Select: FunctionComponent<Props> = ({
   value,
   onChange,
   children,
+  displayedValue,
 }: RenderableProps<Props>) => {
   const selectedOptionText = useComputed(() => {
+    if (displayedValue) return displayedValue.value;
+
     const childrenArray = (
       Array.isArray(children) ? children.flat() : [children]
     ) as ComponentChild[];

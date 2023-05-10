@@ -32,8 +32,10 @@ interface Props {
   onPresetSelect: (newState: Partial<State>) => void;
 }
 
+const presets = signal('Presets');
+
 const Header: FunctionalComponent<Props> = ({ onPresetSelect }) => {
-  const selectValue = signal('');
+  const selectValue = signal('?');
 
   return (
     <header class={styles.siteHeader}>
@@ -43,12 +45,12 @@ const Header: FunctionalComponent<Props> = ({ onPresetSelect }) => {
       <div style={hideFromPrerender}>
         <Select
           value={selectValue}
+          displayedValue={presets}
           onChange={(newVal) => {
             const val = newVal as keyof typeof demos | '';
             if (val) onPresetSelect(demos[newVal as keyof typeof demos]);
           }}
         >
-          <option value="">Presets</option>
           {Object.keys(demos).map((name) => (
             <option value={name}>{name}</option>
           ))}
