@@ -2,9 +2,14 @@ import { Signal, useComputed } from '@preact/signals';
 
 const lineLength = 80;
 
+const durationFormat = new Intl.NumberFormat('en-US', {
+  maximumFractionDigits: 3,
+});
+
 export default function useFriendlyLinearCode(
   parts: Signal<string[]>,
   name: Signal<string>,
+  idealDuration: Signal<number>,
 ): Signal<string> {
   return useComputed(() => {
     if (parts.value.length === 0) return '';
@@ -37,6 +42,14 @@ export default function useFriendlyLinearCode(
       return outputStart + linearStart + lines[0] + linearEnd + outputEnd;
     }
 
+    let idealDurationLine = '';
+
+    if (idealDuration.value !== 0) {
+      idealDurationLine = `\n  --${name}-duration: ${durationFormat.format(
+        idealDuration.value / 1000,
+      )}s;`;
+    }
+
     return (
       outputStart +
       linearStart +
@@ -44,6 +57,7 @@ export default function useFriendlyLinearCode(
       lines.join('\n    ') +
       '\n  ' +
       linearEnd +
+      idealDurationLine +
       outputEnd
     );
   });

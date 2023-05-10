@@ -12,24 +12,20 @@ const processingDebounce = 300;
 export default function useFullPointGeneration(
   code: Signal<string>,
   type: Signal<CodeType>,
-  onDurationChange: (duration: number) => void,
 ): [
   linearData: Signal<LinearData | null>,
   codeError: Signal<string>,
   name: Signal<string>,
+  duration: Signal<number>,
 ] {
   const fullPoints = useSignal<LinearData | null>(null);
   const codeError = useSignal<string>('');
   const name = useSignal<string>('');
+  const duration = useSignal<number>(0);
   const currentProcessingControllerRef = useRef<AbortController | null>(null);
   const processingTimeoutRef = useRef<number>(0);
   const firstProcessRef = useRef(true);
   const lastCodeTypeRef = useRef<CodeType | null>(null);
-  const onDurationChangeRef = useRef<typeof onDurationChange | null>(null);
-
-  useEffect(() => {
-    onDurationChangeRef.current = onDurationChange;
-  }, [onDurationChange]);
 
   useSignalEffect(() => {
     const lastCodeType = lastCodeTypeRef.current;
@@ -50,10 +46,7 @@ export default function useFullPointGeneration(
         fullPoints.value = result.points;
         codeError.value = '';
         name.value = result.name;
-
-        if (result.duration) {
-          onDurationChangeRef.current?.(result.duration);
-        }
+        duration.value = result.duration || 0;
       } catch (error) {
         if ((error as Error).name === 'AbortError') return;
         fullPoints.value = null;
@@ -84,10 +77,10 @@ export default function useFullPointGeneration(
       process();
     } else {
       processingTimeoutRef.current = (
-        setTimeout as typeof window['setTimeout']
+        setTimeout as (typeof window)['setTimeout']
       )(process, processingDebounce);
     }
   });
 
-  return [fullPoints, codeError, name];
+  return [fullPoints, codeError, name, duration];
 }

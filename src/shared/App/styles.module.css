@@ -89,7 +89,7 @@
 
     grid-template:
       'preview' 1fr
-      'output' minmax(295px, 33%)
+      'output' minmax(306px, 33%)
       'simplify' auto
       / 1fr;
   }

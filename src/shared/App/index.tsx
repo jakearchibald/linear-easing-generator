@@ -1,5 +1,10 @@
 import { h, Fragment, RenderableProps, FunctionComponent } from 'preact';
-import { useComputed, useSignal, signal } from '@preact/signals';
+import {
+  useComputed,
+  useSignal,
+  signal,
+  useSignalEffect,
+} from '@preact/signals';
 import Editor from './Editor';
 import 'add-css:./styles.module.css';
 import * as styles from './styles.module.css';
@@ -27,17 +32,23 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
   const { codeType, code, simplify, round, update } = useURLState();
 
   const playAnims = useSignal(initiallyPlay);
-  const durationInputValue = useSignal('1.5');
+  const durationInputValue = useSignal('1.333');
   const duration = useComputed(
-    () => (Number(durationInputValue.value) || 1.5) * 1000,
+    () => (Number(durationInputValue.value) || 1.333) * 1000,
   );
 
-  const [fullPoints, codeError, name] = useFullPointGeneration(
+  const [fullPoints, codeError, name, idealDuration] = useFullPointGeneration(
     code,
     codeType,
-    (newDuration) =>
-      (durationInputValue.value = (newDuration / 1000).toFixed(3)),
   );
+
+  // Update the duration input if we get a valid ideal duration
+  useSignalEffect(() => {
+    if (idealDuration.value) {
+      durationInputValue.value = (idealDuration.value / 1000).toFixed(3);
+    }
+  });
+
   const optimizedPoints = useOptimizedPoints(fullPoints, simplify, round);
 
   // Just pass through the original SVG for the graph, if the input is SVG
@@ -45,7 +56,7 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
     codeType.value === CodeType.JS ? fullPoints.value : code.value,
   );
   const linear = useLinearSyntax(optimizedPoints, round);
-  const friendlyExample = useFriendlyLinearCode(linear, name);
+  const friendlyExample = useFriendlyLinearCode(linear, name, idealDuration);
 
   // Create slightly optimized version for the demos
   const slightlyOptimizedPoints = useOptimizedPoints(
