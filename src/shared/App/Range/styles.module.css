@@ -57,5 +57,5 @@
   border-radius: 100%;
   box-sizing: border-box;
   background: var(--surface-1);
-  border: 1px solid var(--surface-0);
+  border: 1px solid var(--surface-3);
 }
