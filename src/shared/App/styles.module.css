@@ -88,10 +88,9 @@
     gap: var(--ui-side-margin);
 
     grid-template:
-      'preview' 1fr
-      'output' minmax(306px, 33%)
-      'simplify' auto
-      / 1fr;
+      'preview' minmax(352px, 1fr)
+      'output' minmax(113px, 311px)
+      'simplify' auto / 1fr;
   }
   @media (min-width: 1820px) {
     grid-template:
