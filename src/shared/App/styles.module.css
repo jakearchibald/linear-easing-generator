@@ -131,7 +131,7 @@
 
 .input {
   background: none;
-  border: 1px solid var(--surface-0);
+  border: 1.5px solid var(--surface-3);
   border-radius: 4px;
   padding: 0.2rem 0.8rem 0.2rem;
   font: inherit;
@@ -154,7 +154,7 @@
   all: unset;
   cursor: pointer;
   display: inline-block;
-  border: 1.5px solid var(--surface-4);
+  border: 1.5px solid var(--surface-3);
   --size: 39px;
   width: var(--size);
   height: var(--size);

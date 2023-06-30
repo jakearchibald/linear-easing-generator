@@ -5,7 +5,7 @@
 
 .select-current {
   pointer-events: none;
-  border: 1px solid var(--surface-0);
+  border: 1.5px solid var(--surface-3);
   border-radius: 4px;
   display: grid;
   grid-template-columns: 1fr 11px;
