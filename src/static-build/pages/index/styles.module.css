@@ -37,7 +37,6 @@
   }
 }
 
-/*
 @media (prefers-color-scheme: dark) {
   :root {
     --text-1: var(--gray-1);
@@ -47,9 +46,9 @@
     --surface-2: var(--gray-8);
     --surface-3: var(--gray-11);
     --surface-4: var(--gray-12);
+    --red-1: hsl(0 80% 70%);
   }
 }
-*/
 
 html {
   background: var(--surface-0);
