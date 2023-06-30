@@ -58,4 +58,8 @@
   box-sizing: border-box;
   background: var(--surface-1);
   border: 1px solid var(--surface-3);
+
+  @media (prefers-color-scheme: dark) {
+    background: var(--surface-2);
+  }
 }

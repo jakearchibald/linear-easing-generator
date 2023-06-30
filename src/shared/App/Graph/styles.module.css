@@ -1,6 +1,10 @@
 .graph-component {
   background: var(--surface-3);
   overflow: hidden;
+
+  @media (prefers-color-scheme: dark) {
+    background: var(--surface-4);
+  }
 }
 
 .graph-svg {
@@ -36,6 +40,11 @@
   fill: none;
   stroke: var(--surface-4);
   stroke-width: 1px;
+
+  @media (prefers-color-scheme: dark) {
+    stroke: var(--surface-3);
+    stroke-width: 2px;
+  }
 }
 
 .points-svg {
