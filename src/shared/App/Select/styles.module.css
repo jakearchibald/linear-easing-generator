@@ -20,6 +20,7 @@
 }
 
 .real-select {
+  color-scheme: dark light;
   font-size: inherit;
   opacity: 0;
   position: absolute;
