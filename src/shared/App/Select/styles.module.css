@@ -15,6 +15,7 @@
 
   svg {
     width: 100%;
+    stroke: var(--text-2);
   }
 }
 
