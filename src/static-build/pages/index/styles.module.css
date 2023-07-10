@@ -3,6 +3,7 @@
   --gray-3: #dee2e6;
   --gray-4: #ced4da;
   --gray-5: #adb5bd;
+  --gray-7: #495057;
   --gray-8: #343a40;
   --gray-9: #212529;
   --gray-10: #16191d;
@@ -28,6 +29,7 @@
   --error-text: #ff8080;
   --icon-color: #888;
   --editor-background: #282c34;
+  --border-color: var(--surface-3);
 
   --ui-side-margin: 0px;
   --content-side-padding: 30px;
@@ -47,6 +49,7 @@
     --surface-3: var(--gray-11);
     --surface-4: var(--gray-12);
     --red-1: hsl(0 80% 70%);
+    --border-color: var(--surface-2);
   }
 }
 
