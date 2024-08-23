@@ -35,11 +35,16 @@ export default function useFriendlyLinearCode(
 
     if (line) lines.push(line);
 
+    let linearLines = '';
+
     if (
       lines.length === 1 &&
       linearStart.length + lines[0].length + linearEnd.length < lineLength
     ) {
-      return outputStart + linearStart + lines[0] + linearEnd + outputEnd;
+      linearLines = linearStart + lines[0] + linearEnd;
+    } else {
+      linearLines =
+        linearStart + '\n    ' + lines.join('\n    ') + '\n  ' + linearEnd;
     }
 
     let idealDurationLine = '';
@@ -50,15 +55,6 @@ export default function useFriendlyLinearCode(
       )}s;`;
     }
 
-    return (
-      outputStart +
-      linearStart +
-      '\n    ' +
-      lines.join('\n    ') +
-      '\n  ' +
-      linearEnd +
-      idealDurationLine +
-      outputEnd
-    );
+    return outputStart + linearLines + idealDurationLine + outputEnd;
   });
 }
