@@ -1,7 +1,5 @@
 import { Signal, useComputed } from '@preact/signals';
 
-const lineLength = 80;
-
 const durationFormat = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 3,
 });
@@ -10,9 +8,12 @@ export default function useFriendlyLinearCode(
   parts: Signal<string[]>,
   name: Signal<string>,
   idealDuration: Signal<number>,
+  { addLineBreaksWithinLinear = false } = {},
 ): Signal<string> {
   return useComputed(() => {
     if (parts.value.length === 0) return '';
+
+    const lineLength = addLineBreaksWithinLinear ? 80 : Infinity;
 
     let outputStart = ':root {\n';
     let linearStart = `  --${name}-easing: linear(`;

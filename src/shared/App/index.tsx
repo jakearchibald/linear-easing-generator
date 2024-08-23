@@ -56,7 +56,17 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
     codeType.value === CodeType.JS ? fullPoints.value : code.value,
   );
   const linear = useLinearSyntax(optimizedPoints, round);
-  const friendlyExample = useFriendlyLinearCode(linear, name, idealDuration);
+  const friendlyExample = useFriendlyLinearCode(linear, name, idealDuration, {
+    addLineBreaksWithinLinear: true,
+  });
+
+  // https://issues.chromium.org/issues/361652145
+  // A Chrome regression causes linear() to fail if there's whitespace before the first value
+  const friendlyExampleWithoutLinearBreaks = useFriendlyLinearCode(
+    linear,
+    name,
+    idealDuration,
+  );
 
   // Create slightly optimized version for the demos
   const slightlyOptimizedPoints = useOptimizedPoints(
@@ -150,7 +160,7 @@ const App: FunctionComponent<Props> = ({}: RenderableProps<Props>) => {
                 <h2>Output</h2>
                 <p>Some shiny new CSS!</p>
               </div>
-              <CopyButton value={friendlyExample} />
+              <CopyButton value={friendlyExampleWithoutLinearBreaks} />
             </div>
             <Editor
               code={friendlyExample}
